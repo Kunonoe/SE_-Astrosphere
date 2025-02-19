@@ -35,7 +35,7 @@ export default function page() {
                 <span>Don't have an account?</span>
                 <span>Forgot password?</span>
             </div>
-            <button className='px-5 py-2 bg-gray-300 rounded-lg mt-5'>Login</button> 
+            <button className='px-5 py-2 bg-gray-300 font-bold rounded-lg mt-5'>Login</button> 
         </div>
           
     </main>

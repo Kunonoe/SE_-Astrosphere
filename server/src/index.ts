@@ -4,7 +4,7 @@ import bodyParser from 'body-parser';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import compression from 'compression';
-import mongoose from 'mongoose';
+import mongoose, { connect } from 'mongoose';
 import router from './router';
 const app : express.Express = express();
 

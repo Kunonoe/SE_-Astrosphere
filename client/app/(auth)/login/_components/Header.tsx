@@ -1,6 +1,6 @@
 import React from 'react'
 import Image from 'next/image'
-import Pic1 from "@/assets/pic1.png";
+import Pic1 from "@/assets/pic1.jpg";
 
 export default function Header() {
   return (

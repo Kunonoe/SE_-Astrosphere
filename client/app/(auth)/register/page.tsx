@@ -1,8 +1,10 @@
-import React from 'react'
-
+import Register from "./_components/Register"
 
 export default function page() {
   return (
-    <div className='text-sky-500'>register</div>
+    <main>
+          <Register/>
+    </main>
   )
 }
+

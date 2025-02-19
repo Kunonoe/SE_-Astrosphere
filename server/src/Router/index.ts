@@ -1,6 +1,8 @@
-const express = require("express");
+import express from "express";
+import login from "./login";
+
 const router = express.Router();
-const login = require("./login");
+
 export default ()=> {
     login(router)
     return router;

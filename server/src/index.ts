@@ -1,22 +1,28 @@
+require('dotenv').config()
 import express from 'express';
+import bodyParser from 'body-parser';
 import cors from 'cors';
-import bodyParser from 'bodyParser';
+import cookieParser from 'cookie-parser';
 import compression from 'compression';
-import router from './Router';
-const app = express();
-const port = 5000;
+import mongoose from 'mongoose';
+import router from './router';
+const app : express.Express = express();
 
-const db = 1
+app.use(cors({
+  origin: true,
+  credentials: true,
+}));
 
-app.use(cors())
+app.use(compression());
+app.use(cookieParser());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(bodyParser.json())
-app.use(compression())
-
-// readdirSync(path.join(__dirname, 'Router'))
-//     .map((r:any) => app.use('/api', require('./Router/' + r)))
-
-app.listen(port, () => {
-  console.log(`Server running at 5000`);
+mongoose.Promise = global.Promise;
+mongoose.connect(process.env.MONGO_URL)
+mongoose.connection.on('error', (error: Error) => console.log(error));
+app.listen(process.env.SERVER_PORT || 5000, () => {
+    console.log(`Sever running on port: ${process.env.SERVER_PORT || 5000}`);
 });
-app.use('/api',router());
+
+app.use('/api', router());

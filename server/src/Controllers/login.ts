@@ -1,16 +1,27 @@
-import express,{Request , Response} from "express";
+import express from "express";
 
-export function getdata(req:Request,res:Response){//req รับจากหน้าบ้าน ไฟล์ json ,, res ส่งกลับ
-    res.send("hello")
+export const testData = async (req: express.Request, res: express.Response) => {
+    try{
+
+        return res.status(200).send("hello world").end();
+
+    }catch (error) {
+        console.log(error);
+        return res.sendStatus(400);
+    }
 }
-export function login(req:Request,res:Response){
-    try{//กันเวลาดึไม่ได้ ดาต้าเบดได้ฟ้องกลับมา
+
+export const login = async (req: express.Request, res: express.Response) => {
+    try{
+
         const {name,password}=req.body //รับพารามิเตอร์จากหน้าบ้าน มาคำนวน
-        res.send({
+        return res.send({
             status:"saccess",
             name:name
         })
-    }catch (error){
-        res.status(500).send('$(error)');
+
+    }catch (error) {
+        console.log(error);
+        return res.sendStatus(400);
     }
 }

@@ -10,7 +10,7 @@
 }
 
 body {
-  background-image: url("../public/Bg1.jpg");
+  background-image: url("../public/bg9-2.jpg");
   background-repeat: no-repeat; /*ภาพคงที่*/
-  background-size: cover; /*cover = เต็มจอ*/
+  background-size: cover; /*cover = เต็มจอ*/ 
 }

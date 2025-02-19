@@ -3,6 +3,6 @@ import React from 'react'
 
 export default function page() {
   return (
-    <div>register</div>
+    <div className='text-sky-500'>register</div>
   )
 }

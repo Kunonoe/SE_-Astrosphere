@@ -6,11 +6,11 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  color: white;
+  /*color: white;*/
 }
 
 body {
-  background-image: url("../public/bg3.jpg");
+  background-image: url("../public/Bg1.jpg");
   background-repeat: no-repeat; /*ภาพคงที่*/
   background-size: cover; /*cover = เต็มจอ*/
 }

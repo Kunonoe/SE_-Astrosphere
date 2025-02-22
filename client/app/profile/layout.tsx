@@ -1,4 +1,3 @@
-import Navbar from "@/components/Navbar";
 export default function AuthLayout({
   children,
 }: Readonly<{
@@ -6,8 +5,7 @@ export default function AuthLayout({
 }>) {
   return (
     <main>
-        <Navbar/>
-            {children}
+      {children}
     </main>
   );
 }

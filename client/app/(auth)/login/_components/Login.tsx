@@ -14,23 +14,26 @@ export default function page() {
                 <div className="h-fit flex flex-col items-center justify-center bg-white/10 backdrop-blur-lg p-10 rounded-2xl shadow-lg">
                     <span className='text-[50px] font-semibold text-white'>Login</span>
                     <div className='flex flex-col gap-5 mt-10'>
-                        <div className='flex flex-col gap-1'>
-                            <span className='text-white'>Username : </span>
-                            <input type="text" name="username" placeholder='username' className=' w-[300px] rounded-md p-2'
-                                className="w-[300px] rounded-md p-2 bg-white/20 backdrop-blur-md text-white placeholder-gray-300"
-                                value={username}
-                                onChange={(e) => SetUsername(e.target.value)}
-                            />
-                        </div>
 
+                        {/* Username */}
                         <div className='flex flex-col gap-1'>
-                            <span className='text-white'>Password : </span>
-                            <input type="password" name="password" placeholder='password'
-                                className="w-[300px] rounded-md p-2 bg-white/20 backdrop-blur-md text-white placeholder-gray-300"
-                                value={password}
-                                onChange={(e) => SetPassword(e.target.value)}
-                            />
-                        </div>
+                                <span className='text-white'>Username : </span>
+                                <input type="text" name="username" placeholder='Enter your name'
+                                    className="w-[300px] rounded-md p-2 bg-white/20 backdrop-blur-md text-white placeholder-gray-300"
+                                    value={username}
+                                    onChange={(e) => SetUsername(e.target.value)}
+                                />
+                            </div>
+
+                            {/* Password */}
+                            <div className='flex flex-col gap-1'>
+                                <span className='text-white'>Password : </span>
+                                <input type="text" name="Enter your lastname" placeholder='Enter your lastname'
+                                    className="w-[300px] rounded-md p-2 bg-white/20 backdrop-blur-md text-white placeholder-gray-300"
+                                    value={password}
+                                    onChange={(e) => SetPassword(e.target.value)}
+                                />
+                            </div>
                     </div>
 
                     <div className='flex justify-between items-center gap-5 mt-2 text-white'>

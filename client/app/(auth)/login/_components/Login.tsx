@@ -19,7 +19,7 @@ export default function page() {
                         <div className='flex flex-col gap-1'>
                                 <span className='text-white'>Username : </span>
                                 <input type="text" name="username" placeholder='Enter your name'
-                                    className="w-[300px] rounded-md p-2 bg-white/20 backdrop-blur-md text-white placeholder-gray-300"
+                                    className="w-[350px] rounded-md p-2 bg-white/20 backdrop-blur-md text-white placeholder-gray-300"
                                     value={username}
                                     onChange={(e) => SetUsername(e.target.value)}
                                 />
@@ -29,7 +29,7 @@ export default function page() {
                             <div className='flex flex-col gap-1'>
                                 <span className='text-white'>Password : </span>
                                 <input type="text" name="Enter your lastname" placeholder='Enter your lastname'
-                                    className="w-[300px] rounded-md p-2 bg-white/20 backdrop-blur-md text-white placeholder-gray-300"
+                                    className="w-[350px] rounded-md p-2 bg-white/20 backdrop-blur-md text-white placeholder-gray-300"
                                     value={password}
                                     onChange={(e) => SetPassword(e.target.value)}
                                 />

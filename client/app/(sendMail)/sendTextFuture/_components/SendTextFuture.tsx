@@ -1,112 +1,65 @@
 "use client";
+import Clock from "./Clock";
 import { useState, useEffect } from "react";
+import { Calendar } from "lucide-react";
+import Swal from 'sweetalert2'
 
 export default function SendTextFuture() {
     const [message, setMessage] = useState(""); // สถานะข้อความ
-    const [time, setTime] = useState(new Date()); // สถานะเวลา
+    const [date, setDate] = useState<string>("");
 
-    // ตั้งค่าให้เวลาอัพเดททุกๆ วินาที
     useEffect(() => {
-        const interval = setInterval(() => {
-            const now = new Date();
-            setTime(now);
-        }, 1000);
-        return () => clearInterval(interval);
+        const currentDate = new Date();
+        currentDate.setFullYear(currentDate.getFullYear() + 1);
+        const today = currentDate.toLocaleDateString("en-GB", {
+            day: "2-digit", month: "2-digit", year: "numeric"
+        });
+        setDate(today);
     }, []);
 
-    // คำนวณองศาของเข็มนาฬิกา
-    const hoursDeg = ((time.getHours() % 12) + time.getMinutes() / 60) * 30;
-    const minutesDeg = (time.getMinutes() + time.getSeconds() / 60) * 6;
-    const secondsDeg = time.getSeconds() * 6;
-
-    // ฟังก์ชันจัดรูปแบบเวลา
-    const formatTime = (date) => {
-        if (!(date instanceof Date)) return "Loading...";
-        const hours = String(date.getHours()).padStart(2, "0");
-        const minutes = String(date.getMinutes()).padStart(2, "0");
-        const seconds = String(date.getSeconds()).padStart(2, "0");
-        return `${hours}:${minutes}:${seconds}`;
-    };
-
-    // ฟังก์ชันจัดรูปแบบวันที่
-    const formatDate = (date) => {
-        if (!(date instanceof Date)) return "Loading...";
-        const day = String(date.getDate()).padStart(2, "0");
-        const month = date.toLocaleString("default", { month: "long" });
-        const year = date.getFullYear();
-        return `${day} ${month} ${year}`;
-    };
-
     return (
-        <div className="w-full h-[90vh] flex justify-center items-center">
-            <main className="w-full h-full flex justify-around items-center">
-                {/* นาฬิกาอนาล็อก */}
-                <div className="relative w-64 h-64">
-                    <div className="w-full h-full bg-gradient-to-b from-yellow-700 to-yellow-900 border-4 border-yellow-500 rounded-full flex items-center justify-center relative">
-                        {/* ตัวเลขโรมัน */}
-                        {["XII", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI"].map(
-                            (num, index) => {
-                                const angle = (index * 30 * Math.PI) / 180;
-                                const x = 50 + Math.cos(angle) * 40;
-                                const y = 50 + Math.sin(angle) * 40;
-                                return (
-                                    <span
-                                        key={index}
-                                        className="absolute text-yellow-300 font-bold text-lg"
-                                        style={{
-                                            left: `${x}%`,
-                                            top: `${y}%`,
-                                            transform: "translate(-50%, -50%)",
-                                        }}
-                                    >
-                                        {num}
-                                    </span>
-                                );
-                            }
-                        )}
+        <div className="w-full h-[90vh] flex flex-col justify-center items-center">
+            {/* หัวข้อ */}
+            <h1 className="text-[40px] font-bold text-white mt-20">
+                What would you like to tell yourself in the future?
+            </h1>
 
-                        {/* เข็มนาฬิกา */}
-                        <div
-                            className="absolute w-2 h-20 bg-yellow-300 origin-bottom"
-                            style={{ transform: `rotate(${hoursDeg}deg)`, bottom: "50%", clipPath: "polygon(50% 0%, 100% 100%, 0% 100%)" }}
-                        ></div>
-                        <div
-                            className="absolute w-1.5 h-28 bg-white origin-bottom"
-                            style={{ transform: `rotate(${minutesDeg}deg)`, bottom: "50%", clipPath: "polygon(50% 0%, 100% 100%, 0% 100%)" }}
-                        ></div>
-                        <div
-                            className="absolute w-1 h-32 bg-red-500 origin-bottom"
-                            style={{ transform: `rotate(${secondsDeg}deg)`, bottom: "50%", clipPath: "polygon(50% 0%, 100% 100%, 0% 100%)" }}
-                        ></div>
+            <main className="w-full h-full flex justify-center items-start mt-16 gap-56">
 
-                        {/* จุดศูนย์กลาง */}
-                        <div className="absolute w-4 h-4 bg-red-700 rounded-full"></div>
-
-                        {/* นาฬิกาดิจิทอล */}
-                        <div className="absolute inset-5 flex flex-col items-center justify-between py-10">
-                            <p className="text-black text-xl">{formatTime(time)}</p>
-                            <p className="text-black text-xl">{formatDate(time)}</p>
-                        </div>
-                    </div>
+                {/* เรียกนาฬิกามาใช้ */}
+                <div className="ml-10">
+                    <Clock></Clock>
                 </div>
 
                 {/* กล่องข้อความ */}
                 <div className="flex flex-col items-center">
                     <textarea
-                        className="w-96 h-48 p-2 border border-gray-300 bg-transparent text-white placeholder-gray-400 rounded-lg focus:outline-none"
+                        className="w-[450px] h-[300px] p-2 border border-gray-300 bg-transparent text-white placeholder-gray-400 rounded-lg focus:outline-none"
                         placeholder="Type your message here"
                         value={message}
                         onChange={(e) => setMessage(e.target.value)}
                     ></textarea>
 
-                    {/* ปุ่ม */}
-                    <div className="mt-4 flex gap-4">
-                        <button className="px-4 py-2 bg-white text-black rounded-md">Day</button>
-                        <button className="px-4 py-2 bg-white text-black rounded-md">Month</button>
+                    {/* วันที่ปัจจุบัน +1ปี */}
+                    <div className="flex items-center gap-2 mt-5 px-4 py-2 justify-between w-[350px] border bg-white/10 backdrop-blur-md rounded-lg text-white shadow-md">
+                        <span className="text-lg font-semibold">{date}</span>
+                        <Calendar size={20} className="text-white" />
                     </div>
 
                     {/* ปุ่มส่ง */}
-                    <button className="mt-4 px-6 py-2 bg-purple-500 text-white rounded-lg">
+                    <button className="mt-4 px-6 py-2 bg-purple-600 text-white rounded-lg shadow-md hover:bg-purple-700"
+                    onClick={()=>{
+                        Swal.fire({
+                            title: "Successful!",
+                            text: '“Your email has been successfully scheduled to be sent next year!” Thank you!',
+                            icon: "success",
+                            background: "#ffffff", 
+                            color: "#000000",
+                            confirmButtonColor: "#4527a0"
+                        });
+                        
+                    }}
+                    >
                         Send
                     </button>
                 </div>

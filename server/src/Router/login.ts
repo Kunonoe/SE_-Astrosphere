@@ -8,5 +8,6 @@ export default (router: express.Router) =>{
     router.post('/register',register)
     router.post('/getuser',getuser)
     router.post('/update',update)
+
 //router.put() อัปเดตข้อมูล
 }

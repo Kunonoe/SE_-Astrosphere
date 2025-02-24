@@ -2,16 +2,22 @@ import express from "express";
 import { Account } from "../models/login";
 import bcrypt from "bcrypt";
 
-export const testData = async (req: express.Request, res: express.Response) => {
-    try{
+export const showUsers = async (req: express.Request, res: express.Response) => {
+    try {
+        // ดึงเฉพาะ username จากฐานข้อมูล
+        const users = await Account.find({}, "username");
 
-        return res.status(200).send("hello world").end();
+        return res.send({
+            status: "success",
+            users: users.map(user => user.username) // ส่งเฉพาะชื่อออกไป
+        });
 
-    }catch (error) {
+    } catch (error) {
         console.log(error);
         return res.sendStatus(400);
     }
-}
+};
+
 export const login = async (req: express.Request, res: express.Response) => {
     try {
         const {name,password } = req.body;
@@ -124,3 +130,27 @@ export const update = async (req: express.Request, res: express.Response) => {
         return res.sendStatus(400);
     }
 }
+export const deleteID = async (req: express.Request, res: express.Response) => {
+    try {
+        const { username } = req.body;
+
+        // ค้นหาผู้ใช้
+        const user = await Account.findOne({ username });
+
+        if (!user) {
+            return res.status(400).send({ status: "error", message: "User not found" });
+        }
+
+        // ลบผู้ใช้
+        await Account.deleteOne({ username });
+
+        return res.send({
+            status: "success",
+            message: "Account deleted successfully"
+        });
+
+    } catch (error) {
+        console.log(error);
+        return res.sendStatus(400);
+    }
+};

@@ -48,17 +48,17 @@ export default function SendTextFuture() {
 
                     {/* ปุ่มส่ง */}
                     <button className="mt-4 px-6 py-2 bg-purple-600 text-white rounded-lg shadow-md hover:bg-purple-700"
-                    onClick={()=>{
-                        Swal.fire({
-                            title: "Successful!",
-                            text: '“Your email has been successfully scheduled to be sent next year!” Thank you!',
-                            icon: "success",
-                            background: "#ffffff", 
-                            color: "#000000",
-                            confirmButtonColor: "#4527a0"
-                        });
-                        
-                    }}
+                        onClick={() => {
+                            Swal.fire({
+                                title: "Successful!",
+                                text: '“Your email has been successfully scheduled to be sent next year!” Thank you!',
+                                icon: "success",
+                                background: "#ffffff",
+                                color: "#000000",
+                                confirmButtonColor: "#4527a0"
+                            });
+
+                        }}
                     >
                         Send
                     </button>

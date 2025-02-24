@@ -1,5 +1,5 @@
 "use client";
-import Clock from "./Clock";
+import "./Hourglass.css";
 import { useState, useEffect } from "react";
 import { Calendar } from "lucide-react";
 import Swal from 'sweetalert2'
@@ -26,9 +26,17 @@ export default function SendTextFuture() {
 
             <main className="w-full h-full flex justify-center items-start mt-16 gap-56">
 
-                {/* เรียกนาฬิกามาใช้ */}
-                <div className="ml-10">
-                    <Clock></Clock>
+                {/* นาฬิกาทราย */}
+                <div className="w-[300px] h-fit flex justify-center items-center scale-125 mt-10">
+                    <div className="hourglass">
+                        <div className="frame">
+                            <div className="top"></div>
+                            <div className="bottom">
+                                <div className="drip"></div>
+                                <div className="glass"></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 {/* กล่องข้อความ */}

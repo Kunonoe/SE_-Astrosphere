@@ -11,6 +11,7 @@ export default function page() {
         <div className='w-full h-[90vh] flex justify-center items-center'>
             <main className='w-full h-full flex justify-around items-center'>
                 <Image src={Pic2} alt="Pic2" width={400} height={400}></Image>
+                
                 <div className="h-fit flex flex-col items-center justify-center bg-white/10 backdrop-blur-lg p-10 rounded-2xl shadow-lg">
                     <span className='text-[50px] font-semibold text-white'>Login</span>
                     <div className='flex flex-col gap-5 mt-10'>
@@ -42,8 +43,6 @@ export default function page() {
                     </div>
                     <button className='px-5 py-2 bg-gray-300 font-bold rounded-lg mt-5'>Login</button>
                 </div>
-
-
             </main>
         </div>
     )

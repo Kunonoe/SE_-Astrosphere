@@ -15,7 +15,7 @@
     border-radius: 6px;
     border-top: 10px solid var(--frame-color);
     border-bottom: 10px solid var(--frame-color);
-    animation: Rotation 5s infinite;
+    animation: Rotation 8s infinite;
 }
 
 @keyframes Rotation {
@@ -45,7 +45,7 @@
     width: 160px;
     height: 100px;
     background: var(--sand-color);
-    animation: Sand-Falling 5s infinite;
+    animation: Sand-Falling 8s infinite;
 
     transform: translateY(40%);
 }
@@ -94,7 +94,7 @@
     width: 160px;
     height: 100px;
     background: var(--sand-color);
-    animation: Sand-Filling 5s infinite;
+    animation: Sand-Filling 8s infinite;
 
     border-radius: 50% 50% 0 0;
     transform: translate(-50%, 55px);
@@ -133,7 +133,7 @@
     position: absolute;
     left: 50%;
     transform: translateX(-50%);
-    animation: Fade-Drip 5s infinite;
+    animation: Fade-Drip 8s infinite;
 }
 
 @keyframes Fade-Drip {
@@ -161,7 +161,7 @@
         transparent 5px,
         transparent 10px
     );
-    animation: drip 5s infinite;
+    animation: drip 10s infinite;
 
     transform: translateY(-80px);
 }

@@ -16,16 +16,16 @@ export default function page() {
                 <Image src={Pic2} alt="Pic2" width={400} height={400}></Image>
 
                 {/* Register */}
-                <div className="h-fit flex flex-col items-center justify-center bg-white/10 backdrop-blur-lg p-10 rounded-2xl shadow-lg">
-                    <span className='text-[50px] font-semibold text-white'>Register</span>
-                    <div className='flex flex-col gap-5 mt-10'>
+                <div className="h-fit flex flex-col items-center justify-center bg-white/10 backdrop-blur-lg p-7 rounded-2xl shadow-lg">
+                    <span className='text-[45px] font-semibold text-white'>Register</span>
+                    <div className='flex flex-col gap-5 mt-8'>
 
                         <div className='flex justify-center items-center gap-5'>
                             {/* Name */}
                             <div className='flex flex-col gap-1'>
                                 <span className='text-white'>Name : </span>
                                 <input type="text" name="username" placeholder='Enter your name'
-                                    className="w-[300px] rounded-md p-2 bg-white/20 backdrop-blur-md text-white placeholder-gray-300"
+                                    className="text-[13px] w-[275px] rounded-md p-2 bg-white/20 backdrop-blur-md text-white placeholder-gray-300"
                                     value={name}
                                     onChange={(e) => SetName(e.target.value)}
                                 />
@@ -35,7 +35,7 @@ export default function page() {
                             <div className='flex flex-col gap-1'>
                                 <span className='text-white'>Lastname : </span>
                                 <input type="text" name="Enter your lastname" placeholder='Enter your lastname'
-                                    className="w-[300px] rounded-md p-2 bg-white/20 backdrop-blur-md text-white placeholder-gray-300"
+                                    className="text-[13px] w-[275px] rounded-md p-2 bg-white/20 backdrop-blur-md text-white placeholder-gray-300"
                                     value={lastname}
                                     onChange={(e) => SetLastname(e.target.value)}
                                 />
@@ -46,7 +46,7 @@ export default function page() {
                         <div className='flex flex-col gap-1'>
                             <span className='text-white'>Email : </span>
                             <input type="text" name="Enter your email" placeholder='Enter your email'
-                                className="w-[300px] rounded-md p-2 bg-white/20 backdrop-blur-md text-white placeholder-gray-300"
+                                className="text-[13px] w-[275px] rounded-md p-2 bg-white/20 backdrop-blur-md text-white placeholder-gray-300"
                                 value={email}
                                 onChange={(e) => SetEmail(e.target.value)}
                             />
@@ -57,7 +57,7 @@ export default function page() {
                             <div className='flex flex-col gap-1'>
                                 <span className='text-white'>Password : </span>
                                 <input type="password" name="password" placeholder='password'
-                                    className="w-[300px] rounded-md p-2 bg-white/20 backdrop-blur-md text-white placeholder-gray-300"
+                                    className="text-[13px] w-[275px] rounded-md p-2 bg-white/20 backdrop-blur-md text-white placeholder-gray-300"
                                     value={password}
                                     onChange={(e) => SetPassword(e.target.value)}
                                 />
@@ -67,7 +67,7 @@ export default function page() {
                             <div className='flex flex-col gap-1'>
                                 <span className='text-white'>Confirm Password : </span>
                                 <input type="password" name="confirm password" placeholder='confirm password'
-                                    className="w-[300px] rounded-md p-2 bg-white/20 backdrop-blur-md text-white placeholder-gray-300"
+                                    className="text-[13px] w-[275px] rounded-md p-2 bg-white/20 backdrop-blur-md text-white placeholder-gray-300"
                                     value={confirmpassword}
                                     onChange={(e) => SetconfirmPassword(e.target.value)}
                                 />

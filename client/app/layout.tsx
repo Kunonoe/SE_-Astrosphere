@@ -11,9 +11,10 @@ export default function RootLayout({
       <body
         className={`antialiased`}
       > 
-        <main>
+        <main className="h-[85vh] w-full">
           <Navbar/>
           {children}
+          <p className="text-gray-400 text-xl text-center">©2025 AstrosphereTeams</p>
         </main>
       </body>
     </html>

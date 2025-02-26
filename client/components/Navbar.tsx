@@ -1,24 +1,31 @@
 import React from 'react'
+import Image from 'next/image'
 import Link from 'next/link'
 
 export default function Navbar() {
   return (
-    <main className='w-full p-3  flex items-center bg-violet-900/40'>
-    <div className="flex w-full  justify-between items-center">
-      <span className='text-xl px-10 font-bold text-white font-Head'>
-        ASTROSPHERE
-      </span>
-      <div className="flex space-x-0">
-        <Link href="/menu" className='font-bold text-white'>
-          Menu
-        </Link>
-        <Link href="/profile" className='px-20 font-bold text-white'>
-          Profile
-        </Link>
+    <main className='w-full p-2 flex items-center bg-violet-900/40'>
+      <div className="flex w-full justify-between items-center">
+        <div className="flex items-center px-24">
+          <Image src="/logo.png" alt="Logo" width={50} height={50} />
+
+          <span className='text-[15px] font-semibold text-white font-Head ml-2'>
+            ASTROSPHERE
+          </span>
+        </div>
+
+        <div className="flex space-x-0 px-20">
+          <Link href="/menu" className='text-[18px] font-semibold text-white'>
+            Menu
+          </Link>
+
+          <Link href="/profile" className='text-[18px] px-20 font-semibold text-white'>
+            Profile
+          </Link>
+        </div>
       </div>
-    </div>
-  </main>
-  
+    </main>
+
 
     /*อันเก่า <main className='w-full p-3 flex justify-center bg-violet-900/40'>
         <span className='text-xl font-bold text-white font-Head' >ASTROSPHERE</span>

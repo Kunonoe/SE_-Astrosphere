@@ -6,6 +6,7 @@ import cookieParser from 'cookie-parser';
 import compression from 'compression';
 import mongoose, { connect } from 'mongoose';
 import router from './router';
+import { autoSend } from './SubServer/calDate';
 const app : express.Express = express();
 
 app.use(cors({
@@ -18,6 +19,8 @@ app.use(cookieParser());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+
+
 mongoose.Promise = global.Promise;
 mongoose.connect(process.env.MONGO_URL)
 mongoose.connection.on('error', (error: Error) => console.log(error));
@@ -26,3 +29,4 @@ app.listen(process.env.SERVER_PORT || 5000, () => {
 });
 
 app.use('/api', router());
+autoSend();

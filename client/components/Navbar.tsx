@@ -14,22 +14,20 @@ export default function Navbar() {
           </span>
         </div>
 
-        <div className="flex space-x-0 px-20">
+        <div className="flex w-1/3 justify-between px-20">
           <Link href="/menu" className='text-[18px] font-semibold text-white'>
             Menu
           </Link>
 
-          <Link href="/profile" className='text-[18px] px-20 font-semibold text-white'>
+          <Link href="/profile" className='text-[18px] font-semibold text-white'>
             Profile
+          </Link>
+          
+          <Link href="/logout" className='text-[18px] font-semibold text-white'>
+            LogOut
           </Link>
         </div>
       </div>
     </main>
-
-
-    /*อันเก่า <main className='w-full p-3 flex justify-center bg-violet-900/40'>
-        <span className='text-xl font-bold text-white font-Head' >ASTROSPHERE</span>
-    </main>
-      */
   )
 }

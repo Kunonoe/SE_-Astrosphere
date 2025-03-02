@@ -153,6 +153,7 @@ export default function Pro() {
             <button onClick={() => setActiveTab(null)} className="px-4 py-2 mt-4 text-white bg-red-500 rounded-md hover:bg-red-600 transition-all duration-500">Close</button>
           </div>
         )}
+         <button className="px-10 py-2 border-2 border-red-500 text-red-500 font-bold rounded-lg mt-5 bg-transparent w-56 h-12 hover:bg-red-500 hover:text-white transition-all duration-500">Delete ID</button>
         <Link href="/login">
           <button className="px-10 py-2 border-2 border-red-500 text-red-500 font-bold rounded-lg mt-5 bg-transparent w-56 h-12 hover:bg-red-500 hover:text-white transition-all duration-500">Logout</button>
         </Link>

@@ -57,7 +57,7 @@ export default function Pro() {
       </div>
 
 
-      <div className="flex flex-col mt-14">
+      <div className="flex flex-col mt-4">
         <button
           onClick={() => setActiveTab(activeTab === "history" ? null : "history")}
           className={`px-10 py-2 border-2 font-bold rounded-lg mt-5 w-56 h-12 transition-all duration-700 ${

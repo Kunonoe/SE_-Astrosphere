@@ -39,7 +39,7 @@ export default function Pro() {
         </span>
       </div>
 
-      <div className="flex flex-col mt-14">
+      <div className="flex flex-col mt-4">
        <div className="flex justify-start">
           <span className="text-[18px] font-semibold">Firstname</span>
           <span className="text-[18px] font-semibold ml-2">:</span>

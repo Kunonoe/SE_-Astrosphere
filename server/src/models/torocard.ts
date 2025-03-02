@@ -2,19 +2,19 @@ import mongoose from "mongoose"; //เหมือนคีเอตใน SQL
 
 const ToroSchema = new mongoose.Schema(
   {
-    cardid: {
+    cardId: {
       type: String,
       required: true,
     },
-    cardname: {
+    cardName: {
         type: String,
         required: true, //บังคับกรอกมั้ย
     },
-    cardmeaning: {
+    cardMeaning: {
         type: String,
         required: true, //บังคับกรอกมั้ย
     }
 }
 );
 
-export const Toro= mongoose.model('torocard', ToroSchema); 
+export const Toro = mongoose.model('torocard', ToroSchema); 

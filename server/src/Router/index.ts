@@ -1,7 +1,7 @@
 import express from "express";
-import login from "../Router/login";
+import login from "../router/login";
 import otp from "./otp";
-import message from "../Router/message";
+import message from "../router/message";
 
 
 

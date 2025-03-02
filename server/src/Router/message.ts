@@ -1,4 +1,4 @@
-import { reciveContent } from "../Controllers/message";
+import { reciveContent } from "../controllers/message";
 import express from "express";
 
 export default (router: express.Router) => {

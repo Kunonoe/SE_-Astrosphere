@@ -39,18 +39,18 @@ export default function Menu() {
         {
           features.map((feature, index) => (
             <Link href={feature.link} key={index}>
-              <div 
+              <div
                 className="relative rounded-2xl overflow-hidden cursor-pointer hover:scale-105 transition-transform"
                 style={{
                   width: '250px',
                   height: '350px'
                 }}>
-                
+
                 {/* ภาพพื้นหลัง (จางลง) */}
-                <Image 
-                  src={feature.image} 
-                  alt="BgCard1" 
-                  layout="fill" 
+                <Image
+                  src={feature.image}
+                  alt="BgCard1"
+                  layout="fill"
                   objectFit="cover"
                   className="opacity-50 absolute inset-0 z-0"
                 />
@@ -69,7 +69,7 @@ export default function Menu() {
         }
       </div>
 
-      
+
     </div>
   );
 }

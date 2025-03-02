@@ -1,9 +1,7 @@
 import express from "express";
-import login from "../router/login";
+import login from "./login";
 import otp from "./otp";
-import message from "../router/message";
-
-
+import message from "./message";
 
 
 const router = express.Router();

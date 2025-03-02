@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import Image from 'next/image';
-import Pic2 from "@/assets/pic2.png";
+import Logo from "@/assets/logo.png";
 import Gg from "@/assets/google.png";
 
 export default function LoginPage() {
@@ -11,8 +11,8 @@ export default function LoginPage() {
     return (
         <div className='w-full h-[90vh] flex justify-center items-center'>
             <main className='w-full h-full flex justify-around items-center'>
-                <Image src={Pic2} alt="Pic2" width={400} height={400} />
-                
+                <Image src={Logo} alt="Logo" width={350} height={350} className="mb-5" />
+
                 <div className="w-[400px] p-10 bg-white/10 backdrop-blur-lg rounded-xl shadow-lg border border-white/10 flex flex-col items-center">
                     <h1 className="text-[50px] font-bold text-white">Login</h1>
 

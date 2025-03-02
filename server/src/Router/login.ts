@@ -1,7 +1,7 @@
 import express from "express";
 import {login, register, getuser, update, deleteID, showUsers  } from "../controllers/login";
 import {requestOTP , updatePassword}from "../controllers/otp";
-import otpRouter from "../router/otp";  // แก้จาก otp เป็น otpRouter
+import otpRouter from "./otp";  // แก้จาก otp เป็น otpRouter
 
 // const router = express.Router();
 

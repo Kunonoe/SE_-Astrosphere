@@ -18,7 +18,7 @@ export default function Menu() {
     {
       title: 'ส่งข้อความถึงตัวฉัน\nในอนาคต',
       image: BgCard1,
-      link: '/sendmail'
+      link: '/sendTextFuture'
     },
     {
       title: 'แชร์รีวิวคำทำนาย',

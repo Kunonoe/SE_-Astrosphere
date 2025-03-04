@@ -24,7 +24,7 @@ export default function Navbar() {
           </Link>
           
           <Link href="/logout" className='text-[18px] font-semibold text-white'>
-            LogOut
+            Log Out
           </Link>
         </div>
       </div>

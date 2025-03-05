@@ -1,6 +1,8 @@
 const express = require('express');
 const router = express.Router();
 import { Request, Response } from 'express';
+import { UserHistory } from "../models/userHistory";
+import { Zodiac } from '../models/zodiac';
 
 // ตารางลัคนาราศีที่รองรับเวลาเกิด (แบ่งช่วง 2 ชั่วโมง)
 const zodiacTable: Record<string, string[]> = {
@@ -18,44 +20,96 @@ const zodiacTable: Record<string, string[]> = {
     "16 ธ.ค. - 14 ม.ค.": ["ธนู", "มังกร", "กุมภ์", "มีน", "เมษ", "พฤษภ", "เมถุน", "กรกฎ", "สิงห์", "กันย์", "ตุลย์", "พิจิก"]
 };
 const timeSlots = [5, 7, 9, 11, 13, 15, 17, 19, 21, 23, 1, 3];
-
-export const calculateZodiac = (birthdate: string, birthtime: string): { birthdate: string; birthtime: string; zodiacSign?: string; error?: string } => {
-    console.log("📌 คำนวณลัคนาราศี:", birthdate, birthtime);
-    
-    const date = new Date(birthdate);
-    const hour = parseInt(birthtime.split(':')[0]);
-
-    const monthNames = ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."];
-    let selectedRange = Object.keys(zodiacTable).find(range => {
-        const [start, end] = range.split(' - ').map(date => {
-            const [d, m] = date.split(' ');
-            return { day: parseInt(d), month: monthNames.indexOf(m) + 1 };
-        });
-        return (date.getMonth() + 1 > start.month || (date.getMonth() + 1 === start.month && date.getDate() >= start.day)) &&
-               (date.getMonth() + 1 < end.month || (date.getMonth() + 1 === end.month && date.getDate() <= end.day));
-    });
-
-    if (!selectedRange) {
-        console.log("❌ ข้อมูลเดือนเกิดไม่ถูกต้อง");
-        return { birthdate, birthtime, error: "ข้อมูลเดือนเกิดไม่ถูกต้อง" };
-    }
-
-    let slotIndex = timeSlots.findIndex(slot => hour >= slot && hour < (slot + 2));
-    if (slotIndex === -1) slotIndex = timeSlots.length - 1;
-
-    let zodiacSign = zodiacTable[selectedRange][slotIndex];
-    console.log(`✅ ลัคนาราศีที่ได้: ${zodiacSign} (index: ${slotIndex})`);
-
-    return { birthdate, birthtime, zodiacSign };
+// ✅ แปลงชื่อราศีจากไทย -> อังกฤษ
+const zodiacMapping: Record<string, string> = {
+    "มังกร": "Capricorn", "กุมภ์": "Aquarius", "มีน": "Pisces",
+    "เมษ": "Aries", "พฤษภ": "Taurus", "เมถุน": "Gemini",
+    "กรกฎ": "Cancer", "สิงห์": "Leo", "กันย์": "Virgo",
+    "ตุลย์": "Libra", "พิจิก": "Scorpio", "ธนู": "Sagittarius"
 };
+export const calculateZodiacAndSave = async (req: Request) => {
+    try {
+        const { userID, birthdate, birthtime } = req.body;
+        if (!userID || !birthdate || !birthtime) {
+            throw new Error("กรุณาระบุ userID, วันเกิด และเวลาเกิด");
+        }
 
-router.post('/calculate', (req: Request, res: Response) => {
-    const { birthdate, birthtime } = req.body;
-    if (!birthdate || !birthtime) {
-        return res.status(400).json({ error: "กรุณาระบุวันเกิดและเวลาเกิด" });
+        console.log("📌 คำนวณลัคนาราศี:", birthdate, birthtime);
+        const date = new Date(birthdate);
+        const monthIndex: number = date.getMonth() + 1; // ✅ แปลงเดือนให้เป็นตัวเลข
+        const day: number = date.getDate();
+        const hour: number = parseInt(birthtime.split(':')[0], 10);
+
+        // ✅ แปลงชื่อเดือนเป็นตัวเลข
+        const monthNames: Record<string, number> = {
+            "ม.ค.": 1, "ก.พ.": 2, "มี.ค.": 3, "เม.ย.": 4,
+            "พ.ค.": 5, "มิ.ย.": 6, "ก.ค.": 7, "ส.ค.": 8,
+            "ก.ย.": 9, "ต.ค.": 10, "พ.ย.": 11, "ธ.ค.": 12
+        };
+
+        // ✅ หา `selectedRange`
+        let selectedRangeKey = Object.keys(zodiacTable).find(range => {
+            const [start, end] = range.split(' - ').map(date => {
+                const [d, m] = date.split(' ');
+                return { day: parseInt(d, 10), month: monthNames[m] };
+            });
+
+            return (
+                (monthIndex > start.month || (monthIndex === start.month && day >= start.day)) &&
+                (monthIndex < end.month || (monthIndex === end.month && day <= end.day))
+            );
+        });
+
+        if (!selectedRangeKey) {
+            throw new Error("ข้อมูลเดือนเกิดไม่ถูกต้อง");
+        }
+
+        let selectedRange = zodiacTable[selectedRangeKey];
+
+        // ✅ คำนวณราศีตามช่วงเวลา
+        let slotIndex = timeSlots.findIndex((slot, index) => {
+            let nextSlot = timeSlots[index + 1] || timeSlots[0];
+            return hour >= slot && hour < nextSlot;
+        });
+
+        if (slotIndex === -1) slotIndex = 0;
+
+        let thaiZodiac = selectedRange[slotIndex];
+        console.log(`✅ ลัคนาราศีที่ได้ (ไทย): ${thaiZodiac}`);
+
+        // ✅ แปลงราศีเป็นภาษาอังกฤษ
+        let englishZodiac = zodiacMapping[thaiZodiac] || thaiZodiac;
+        console.log(`✅ ลัคนาราศีที่ได้ (อังกฤษ): ${englishZodiac}`);
+
+        // ✅ บันทึกลง MongoDB
+        const historyEntry = await UserHistory.create({
+            userID,
+            type: "zodiac",
+            zodiacSign: thaiZodiac,
+            birthdate,
+            birthtime
+        });
+
+        // ✅ ค้นหาข้อมูลราศีจาก MongoDB
+        const zodiacInfo = await Zodiac.findOne({ cardNAME: { $regex: `^${englishZodiac}$`, $options: "i" } }).lean();
+        if (!zodiacInfo) {
+            throw new Error(`ไม่พบข้อมูลราศีใน MongoDB: ${englishZodiac}`);
+        }
+
+        console.log("✅ ข้อมูลราศีที่ดึงมา:", zodiacInfo);
+
+        return {
+            userID,
+            birthdate,
+            birthtime,
+            zodiacSign: thaiZodiac,
+            englishZodiac,
+            historyID: historyEntry._id,
+            zodiacData: zodiacInfo
+        };
+
+    } catch (error: any) {
+        console.error("❌ เกิดข้อผิดพลาด:", error.message);
+        throw new Error(error.message);
     }
-    const result = calculateZodiac(birthdate, birthtime);
-    res.json(result);
-});
-
-export default router;
+};

@@ -4,6 +4,7 @@ import otp from "./otp";
 import message from "./message";
 import zodiac from "./zodiac";
 import tarot from "./tarot";
+import review from "./review";
 
 
 const router = express.Router();
@@ -14,5 +15,6 @@ export default ()=> {
     message(router)
     zodiac(router)
     tarot(router)
+    review(router)
     return router;
 }

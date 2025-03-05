@@ -16,10 +16,10 @@ const client = new MongoClient(uri);
 
 // Interface สำหรับข้อมูลการ์ด
 interface Card {
-    cardID: number;
-    cardNAME: string;
-    cardMEANING: string;
-    cardPHOTO: string;
+    cardID: Number;
+    cardNAME: String;
+    cardMEANING: String;
+    cardPHOTO: String;
 }
 
 // ฟังก์ชันนำเข้า CSV เข้า MongoDB

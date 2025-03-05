@@ -1,7 +1,7 @@
 import express from "express";
 import {login, register, getuser, update, deleteID, showUsers  } from "../controllers/login";
 import {requestOTP , updatePassword}from "../controllers/otp";
-import otpRouter from "./otp";  // แก้จาก otp เป็น otpRouter
+//import otpRouter from "./otp";  // แก้จาก otp เป็น otpRouter
 import { googleLogin } from "../controllers/login";
 
 export default (router: express.Router) => {
@@ -20,4 +20,5 @@ export default (router: express.Router) => {
 
     // 🔹 API สำหรับ Login ผ่าน Google
     router.post("/google", googleLogin);
+
 }

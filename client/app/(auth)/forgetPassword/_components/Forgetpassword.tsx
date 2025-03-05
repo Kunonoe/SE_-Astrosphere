@@ -1,7 +1,7 @@
 "use client";
 import { useState } from 'react'
 import Image from 'next/image'
-import Pic2 from "@/assets/pic2.png"
+import Logo from "@/assets/logo.png"
 
 export default function page() {
     const [email, SetEmail] = useState<string>("");
@@ -12,7 +12,7 @@ export default function page() {
     return (
         <div className='w-full h-[90vh] flex justify-center items-center'>
             <main className='w-full h-full flex justify-around items-center'>
-                <Image src={Pic2} alt="Pic2" width={400} height={400}></Image>
+                <Image src={Logo} alt="Pic2" width={350} height={350}></Image>
 
                 <div className="h-fit flex flex-col items-center justify-center bg-white/10 backdrop-blur-lg p-10 rounded-2xl shadow-lg">
                     <span className='text-[40px] font-semibold text-white'>Forgot Password</span>

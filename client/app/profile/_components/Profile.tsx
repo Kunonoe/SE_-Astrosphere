@@ -39,7 +39,7 @@ export default function Pro() {
         </span>
       </div>
 
-      <div className="flex flex-col mt-14">
+      <div className="flex flex-col mt-10">
        <div className="flex justify-start">
           <span className="text-[18px] font-semibold">Firstname</span>
           <span className="text-[18px] font-semibold ml-2">:</span>
@@ -53,7 +53,7 @@ export default function Pro() {
           <span className="text-[18px] font-semibold ml-3">:</span>
         </div>
       </div>
-      <div className="flex flex-col mt-14">
+      <div className="flex flex-col mt-1">
         <button
           onClick={() => setActiveTab(activeTab === "history" ? null : "history")}
           className={`px-10 py-2 border-2 font-bold rounded-lg mt-5 w-56 h-12 transition-all duration-700 ${

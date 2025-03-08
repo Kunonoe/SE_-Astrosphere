@@ -1,8 +1,9 @@
 const express = require('express');
-const router = express.Router();
+// const router = express.Router();
 import { Request, Response } from 'express';
 import { UserHistory } from "../models/userHistory";
 import { Zodiac } from '../models/zodiac';
+import { Account } from "../models/login"; // ✅ เพิ่มโมเดล Account เพื่อดึงข้อมูลผู้ใช้
 
 // ตารางลัคนาราศีที่รองรับเวลาเกิด (แบ่งช่วง 2 ชั่วโมง)
 const zodiacTable: Record<string, string[]> = {
@@ -27,26 +28,51 @@ const zodiacMapping: Record<string, string> = {
     "กรกฎ": "Cancer", "สิงห์": "Leo", "กันย์": "Virgo",
     "ตุลย์": "Libra", "พิจิก": "Scorpio", "ธนู": "Sagittarius"
 };
-export const calculateZodiacAndSave = async (req: Request) => {
+export const calculateZodiacAndSave = async (req: Request, res: Response) => {
     try {
-        const { userID, birthdate, birthtime } = req.body;
-        if (!userID || !birthdate || !birthtime) {
-            throw new Error("กรุณาระบุ userID, วันเกิด และเวลาเกิด");
+        let { userID, birthdate, birthtime } = req.body; // ✅ รับวันเกิด + เวลาเกิดจากผู้ใช้
+
+        if (!userID) {
+            throw new Error("กรุณาระบุ userID");
+                }
+        // ✅ ดึงข้อมูลผู้ใช้จาก MongoDB
+        const user = await Account.findById(userID).lean();
+        if (!user) {
+            throw new Error("ไม่พบผู้ใช้ในระบบ");
+        }
+
+        // ✅ ถ้าไม่มี `birthdate` หรือ `birthtime` ให้ดึงจาก MongoDB
+        if (!birthdate) birthdate = user.birthday || null;
+        
+        // ✅ ถ้ายังไม่มี `birthdate` หรือ `birthtime` ให้แจ้งให้กรอก
+        if (!birthdate || !birthtime) {
+            throw new Error("ไม่พบข้อมูลวันเกิดของคุณ กรุณากรอกวันเกิดและเวลาเกิด");
         }
 
         console.log("📌 คำนวณลัคนาราศี:", birthdate, birthtime);
-        const date = new Date(birthdate);
-        const monthIndex: number = date.getMonth() + 1; // ✅ แปลงเดือนให้เป็นตัวเลข
-        const day: number = date.getDate();
-        const hour: number = parseInt(birthtime.split(':')[0], 10);
 
-        // ✅ แปลงชื่อเดือนเป็นตัวเลข
+        // ✅ แปลงรูปแบบวันเกิดให้อยู่ใน `DD/MM/YYYY` หรือ `YYYY-MM-DD`
+        let dateParts: number[];
+        if (birthdate.includes("-")) {
+            dateParts = birthdate.split("-").map(Number); // `YYYY-MM-DD` → `[YYYY, MM, DD]`
+        } else if (birthdate.includes("/")) {
+            dateParts = birthdate.split("/").map(Number); // `DD/MM/YYYY` → `[DD, MM, YYYY]`
+        } else {
+            throw new Error("รูปแบบวันเกิดไม่ถูกต้อง ควรเป็น YYYY-MM-DD หรือ DD/MM/YYYY");
+        }
+
+        const day: number = birthdate.includes("/") ? dateParts[0] : dateParts[2]; // ✅ ใช้ค่าจาก `birthdate`
+        const monthIndex: number = birthdate.includes("/") ? dateParts[1] : dateParts[1]; // ✅ ใช้เดือนตามปกติ (1-12)
+
+        // ✅ แปลงเวลาเกิดเป็น `hour`
+        const hour: number = parseInt(birthtime.split(':')[0], 10);
+        
+        // ✅ แปลงชื่อเดือนเป็นตัวเลข (ถ้าจำเป็น)
         const monthNames: Record<string, number> = {
             "ม.ค.": 1, "ก.พ.": 2, "มี.ค.": 3, "เม.ย.": 4,
             "พ.ค.": 5, "มิ.ย.": 6, "ก.ค.": 7, "ส.ค.": 8,
             "ก.ย.": 9, "ต.ค.": 10, "พ.ย.": 11, "ธ.ค.": 12
         };
-
         // ✅ หา `selectedRange`
         let selectedRangeKey = Object.keys(zodiacTable).find(range => {
             const [start, end] = range.split(' - ').map(date => {
@@ -61,18 +87,14 @@ export const calculateZodiacAndSave = async (req: Request) => {
         });
 
         if (!selectedRangeKey) {
-            throw new Error("ข้อมูลเดือนเกิดไม่ถูกต้อง");
+            return res.status(400).json({ error: "ข้อมูลเดือนเกิดไม่ถูกต้อง" });
         }
 
         let selectedRange = zodiacTable[selectedRangeKey];
 
         // ✅ คำนวณราศีตามช่วงเวลา
-        let slotIndex = timeSlots.findIndex((slot, index) => {
-            let nextSlot = timeSlots[index + 1] || timeSlots[0];
-            return hour >= slot && hour < nextSlot;
-        });
-
-        if (slotIndex === -1) slotIndex = 0;
+        let slotIndex = timeSlots.findIndex(slot => hour >= slot && hour < (slot + 2));
+        if (slotIndex === -1) slotIndex = timeSlots.length - 1;
 
         let thaiZodiac = selectedRange[slotIndex];
         console.log(`✅ ลัคนาราศีที่ได้ (ไทย): ${thaiZodiac}`);
@@ -81,35 +103,40 @@ export const calculateZodiacAndSave = async (req: Request) => {
         let englishZodiac = zodiacMapping[thaiZodiac] || thaiZodiac;
         console.log(`✅ ลัคนาราศีที่ได้ (อังกฤษ): ${englishZodiac}`);
 
+        // ✅ ค้นหาข้อมูลราศีจาก MongoDB
+        const zodiacInfo = await Zodiac.findOne({ cardNAME: { $regex: `^${englishZodiac}$`, $options: "i" } }).lean();
+        if (!zodiacInfo) {
+            return res.status(404).json({ error: `ไม่พบข้อมูลราศีใน MongoDB: ${englishZodiac}` });
+        }
+
+        console.log("✅ ข้อมูลราศีที่ดึงมา:", zodiacInfo);
+
         // ✅ บันทึกลง MongoDB
         const historyEntry = await UserHistory.create({
             userID,
             type: "zodiac",
             zodiacSign: thaiZodiac,
             birthdate,
-            birthtime
+            birthtime,
+            zodiacImage: zodiacInfo.cardPHOTO,
+            zodiacPrediction: zodiacInfo.cardMEANING
         });
 
-        // ✅ ค้นหาข้อมูลราศีจาก MongoDB
-        const zodiacInfo = await Zodiac.findOne({ cardNAME: { $regex: `^${englishZodiac}$`, $options: "i" } }).lean();
-        if (!zodiacInfo) {
-            throw new Error(`ไม่พบข้อมูลราศีใน MongoDB: ${englishZodiac}`);
-        }
-
-        console.log("✅ ข้อมูลราศีที่ดึงมา:", zodiacInfo);
-
-        return {
+        return res.json({
+            message: "คำนวณลัคนาราศีสำเร็จและบันทึกประวัติแล้ว",
             userID,
             birthdate,
             birthtime,
             zodiacSign: thaiZodiac,
             englishZodiac,
-            historyID: historyEntry._id,
-            zodiacData: zodiacInfo
-        };
+            zodiacImage: zodiacInfo.cardPHOTO,
+            zodiacPrediction: zodiacInfo.cardMEANING,
+            historyID: historyEntry._id
+        });
 
     } catch (error: any) {
         console.error("❌ เกิดข้อผิดพลาด:", error.message);
-        throw new Error(error.message);
+        return res.status(500).json({ error: "เกิดข้อผิดพลาดในเซิร์ฟเวอร์" });
     }
 };
+

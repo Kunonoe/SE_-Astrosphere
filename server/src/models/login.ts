@@ -1,21 +1,12 @@
-import mongoose from "mongoose"; //เหมือนคีเอตใน SQL
+import mongoose from "mongoose";
 
-const AccountSchema = new mongoose.Schema(
-  {
-    username: {
-      type: String,
-      required: true,
-    },
-    password: {
-        type: String,
-        required: true, //บังคับกรอกมั้ย
-    },
-    email: {
-        type: String,
-        required: true, //บังคับกรอกมั้ย
-    },
-  },
-  { timestamps: true } //บันทึกเวลา
-);
+const accountSchema = new mongoose.Schema({
+    username: { type: String, required: true, unique: true },
+    email: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
+    firstname: { type: String },  // ✅ เพิ่มชื่อจริง
+    lastname: { type: String },   // ✅ เพิ่มนามสกุล
+    birthday: { type: String },   // ✅ เพิ่มวันเกิด
+}, { timestamps: true });
 
-export const Account= mongoose.model('accounts', AccountSchema); 
+export const Account = mongoose.model("Account", accountSchema);

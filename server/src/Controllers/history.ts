@@ -3,12 +3,13 @@ import { UserHistory } from "../models/userHistory";
 
 // ✅ API ดูประวัติทั้งหมดของผู้ใช้
 export const getUserHistory = async (req: Request, res: Response) => {
-    const { userID } = req.params;
-    if (!userID) {
-        return res.status(400).json({ error: "กรุณาระบุ userID" });
-    }
-
     try {
+        const { userID } = req.params;
+        if (!userID) {
+            return res.status(400).json({ error: "กรุณาระบุ userID" });
+        }
+
+        // 🔹 ค้นหาประวัติทั้งหมดของผู้ใช้
         const history = await UserHistory.find({ userID }).sort({ timestamp: -1 }).lean();
 
         if (history.length === 0) {

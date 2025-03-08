@@ -2,7 +2,7 @@ import { Router } from "express";
 import { createReview, getZodiacReviews, getTarotReviews, updateReview, deleteReview, getAllReviews, getUserReviews } from "../controllers/review";
 
 export default (router: Router) => {
-    router.get('/history/:userID',getUserReviews);//ดูประวัติ
+    //router.get('/history/:userID',getUserReviews);//ดูประวัติ
     router.post('/reviews', createReview);//เขียนรีวิว
     router.get('/reviews/all',getAllReviews);//ดูรีวิวทั้งหมด
     router.get('/reviews/zodiac/:zodiacSign', getZodiacReviews);

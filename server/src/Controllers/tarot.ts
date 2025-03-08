@@ -18,24 +18,49 @@ export const drawTarot = async (req: Request, res: Response) => {
 
         // **สุ่มไพ่ 3 ใบ ไม่ซ้ำกัน**
         const shuffled = allTarotCards.sort(() => 0.5 - Math.random());
+        // ✅ สุ่มไพ่ 1 ใบ (แบบเดียวกับราศีที่แสดง 1 ค่า)
         const selectedCards = shuffled.slice(0, 3);
 
-        console.log("✅ ไพ่ที่สุ่มได้:", selectedCards);
-        // 🔹 บันทึกลง `user_history`
+        // console.log("✅ ไพ่ที่สุ่มได้:", selectedCards);
+        // // 🔹 บันทึกลง `user_history`
         const historyEntry = await UserHistory.create({
             userID,
             type: "tarot",
-            drawnCards: selectedCards
+            tarotName1: selectedCards[0].cardNAME,
+            tarotPrediction1: selectedCards[0].cardMEANING,
+            tarotImage1: selectedCards[0].cardPHOTO,
+            tarotName2: selectedCards[1].cardNAME,
+            tarotPrediction2: selectedCards[1].cardMEANING,
+            tarotImage2: selectedCards[1].cardPHOTO,
+            tarotName3: selectedCards[2].cardNAME,
+            tarotPrediction3: selectedCards[2].cardMEANING,
+            tarotImage3: selectedCards[2].cardPHOTO
         });
 
         return res.json({
             message: "สุ่มไพ่สำเร็จและบันทึกประวัติแล้ว",
             userID,
-            drawnCards: selectedCards,
+            tarotCards: [
+                {
+                    tarotName: selectedCards[0].cardNAME,
+                    tarotPrediction: selectedCards[0].cardMEANING,
+                    tarotImage: selectedCards[0].cardPHOTO
+                },
+                {
+                    tarotName: selectedCards[1].cardNAME,
+                    tarotPrediction: selectedCards[1].cardMEANING,
+                    tarotImage: selectedCards[1].cardPHOTO
+                },
+                {
+                    tarotName: selectedCards[2].cardNAME,
+                    tarotPrediction: selectedCards[2].cardMEANING,
+                    tarotImage: selectedCards[2].cardPHOTO
+                }
+            ],
             historyID: historyEntry._id
         });
     } catch (error) {
-        console.error("❌ เกิดข้อผิดพลาดในการสุ่มไพ่", error);
+        console.error("❌ เกิดข้อผิดพลาดในการสุ่มไพ่", error.message);
         return res.status(500).json({ error: "เกิดข้อผิดพลาดในเซิร์ฟเวอร์" });
     }
 };

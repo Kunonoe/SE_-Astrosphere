@@ -5,6 +5,8 @@ export const resend = new Resend(process.env.RESEND_API_KEY);
 export const sendOTP = async (email: string, otp: number) => {
     if (process.env.NODE_ENV === 'development') return;
 
+    console.log(`📩 กำลังส่ง OTP: ${otp} ไปที่ ${email}`);
+    
     const isSent = await resend.emails.send({
         from: 'noreply@email.astrosphere.website',
         to: email,

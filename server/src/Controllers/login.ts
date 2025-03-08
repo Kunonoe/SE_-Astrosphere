@@ -109,51 +109,36 @@ export const register = async (req: express.Request, res: express.Response) => {
     }
 };
 
-
-export const getuser = async (req: express.Request, res: express.Response) => {
-    try{
-
-        const {name}=req.body //รับพารามิเตอร์จากหน้าบ้าน มาคำนวน
-        const result = await Account.find({ //หา
-            username :name // หาuser = name เหมือน select
-        }) 
-        return res.send({ //ถ้าเซฟได้ให้้ส่งกลับไป
-           result:result
-        })
-
-    }catch (error) {
-        console.log(error);
-        return res.sendStatus(400);
-    }
-}
 export const updateOTP = async (req: express.Request, res: express.Response) => {
-    try{
-
-        const {username,newpassword}=req.body //รับพารามิเตอร์จากหน้าบ้าน มาคำนวน
-       
-        // ค้นหาผู้ใช้ก่อนอัปเดต
-        const user = await Account.findOne({ username: username });
-        if (!user) {
-            return res.status(400).send({ status: "error", message: "User not found" });
+    try {
+        const { email, otp, newPassword, confirmPassword } = req.body;
+        if (!email || !otp || !newPassword || !confirmPassword) {
+            return res.status(400).json({ error: "กรุณากรอกข้อมูลให้ครบถ้วน" });
         }
 
-        // เข้ารหัสรหัสผ่านใหม่
+        // ✅ ตรวจสอบ OTP
+        const validOTP = await otp.findOne({ email, otp }).lean();
+        if (!validOTP) return res.status(400).json({ error: "OTP ไม่ถูกต้อง" });
+
+        // ✅ ตรวจสอบรหัสผ่านใหม่
+        if (newPassword !== confirmPassword) return res.status(400).json({ error: "รหัสผ่านไม่ตรงกัน" });
+
+        // ✅ เข้ารหัสรหัสผ่านใหม่
         const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(newpassword, salt);
+        const hashedPassword = await bcrypt.hash(newPassword, salt);
 
-        // อัปเดตรหัสผ่าน
-        const result = await Account.updateOne(
-            { username: username }, 
-            { $set: { password: hashedPassword } }
-        );
+        // ✅ อัปเดตรหัสผ่าน
+        await Account.updateOne({ email }, { $set: { password: hashedPassword } });
 
-        return res.send({ status: "success", result });
+        // ✅ ลบ OTP
+        await otp.deleteOne({ email, otp });
 
-    }catch (error) {
-        console.log(error);
-        return res.sendStatus(400);
+        return res.status(200).json({ message: "รีเซ็ตรหัสผ่านสำเร็จ" });
+
+    } catch (error) {
+        return res.status(500).json({ error: "เกิดข้อผิดพลาดในการรีเซ็ตรหัสผ่าน" });
     }
-}
+};
 export const deleteAccount = async (req: express.Request, res: express.Response) => {
     try {
         const { userId } = req.body;

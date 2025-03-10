@@ -7,6 +7,7 @@ import zodiac from "./zodiac";
 import tarot from "./tarot";
 import review from "./review";
 import history from "./history";
+import "../SubServer/croncounttime";
 
 
 

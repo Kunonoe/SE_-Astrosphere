@@ -6,7 +6,8 @@ import cookieParser from 'cookie-parser';
 import compression from 'compression';
 import mongoose, { connect } from 'mongoose';
 import router from './router';
-import { autoSend } from './SubServer/calDate';
+import { sendScheduledMessages } from './SubServer/sendmessages';
+import "./SubServer/croncounttime";
 const app : express.Express = express();
 
 app.use(cors({
@@ -29,4 +30,4 @@ app.listen(process.env.SERVER_PORT || 5000, () => {
 });
 
 app.use('/api', router());
-autoSend();
+sendScheduledMessages();

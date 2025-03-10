@@ -12,7 +12,7 @@ export const createReview = async (req: Request, res: Response): Promise<Respons
             return res.status(400).json({ error: "กรุณากรอกข้อมูลให้ครบถ้วน" });
         }
 
-        // ✅ ตรวจสอบว่า `historyID` เป็น ObjectId ที่ถูกต้อง
+        // ✅ ตรวจสอบว่า `historyId` เป็น ObjectId ที่ถูกต้อง
         if (!mongoose.Types.ObjectId.isValid(historyID)) {
             return res.status(400).json({ error: "historyID ไม่ถูกต้อง" });
         }
@@ -32,12 +32,13 @@ export const createReview = async (req: Request, res: Response): Promise<Respons
             return res.status(404).json({ error: "ไม่พบข้อมูลประวัติการใช้งาน" });
         }
 
-        let cardType, cardName, cardImage;
+        let cardType, cardName, cardImage, zodiacMeaning;
 
         if (historyData.type === "zodiac") {
             cardType = "zodiac";
             cardName = historyData.zodiacSign;
             cardImage = historyData.zodiacImage;
+            zodiacMeaning = historyData.zodiacPrediction || "ไม่มีข้อมูลความหมายของราศี"; // ✅ เพิ่มความหมายของราศี
         } else if (historyData.type === "tarot") {
             cardType = "tarot";
             cardName = `${historyData.tarotName1}, ${historyData.tarotName2}, ${historyData.tarotName3}`;
@@ -58,6 +59,7 @@ export const createReview = async (req: Request, res: Response): Promise<Respons
             cardType,
             cardName,
             cardImage,
+            zodiacMeaning,
             userPrediction
         });
 

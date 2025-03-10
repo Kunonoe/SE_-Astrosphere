@@ -108,37 +108,6 @@ export const register = async (req: express.Request, res: express.Response) => {
         return res.status(500).json({ status: "error", message: "Internal Server Error" });
     }
 };
-
-export const updateOTP = async (req: express.Request, res: express.Response) => {
-    try {
-        const { email, otp, newPassword, confirmPassword } = req.body;
-        if (!email || !otp || !newPassword || !confirmPassword) {
-            return res.status(400).json({ error: "กรุณากรอกข้อมูลให้ครบถ้วน" });
-        }
-
-        // ✅ ตรวจสอบ OTP
-        const validOTP = await otp.findOne({ email, otp }).lean();
-        if (!validOTP) return res.status(400).json({ error: "OTP ไม่ถูกต้อง" });
-
-        // ✅ ตรวจสอบรหัสผ่านใหม่
-        if (newPassword !== confirmPassword) return res.status(400).json({ error: "รหัสผ่านไม่ตรงกัน" });
-
-        // ✅ เข้ารหัสรหัสผ่านใหม่
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(newPassword, salt);
-
-        // ✅ อัปเดตรหัสผ่าน
-        await Account.updateOne({ email }, { $set: { password: hashedPassword } });
-
-        // ✅ ลบ OTP
-        await otp.deleteOne({ email, otp });
-
-        return res.status(200).json({ message: "รีเซ็ตรหัสผ่านสำเร็จ" });
-
-    } catch (error) {
-        return res.status(500).json({ error: "เกิดข้อผิดพลาดในการรีเซ็ตรหัสผ่าน" });
-    }
-};
 export const deleteAccount = async (req: express.Request, res: express.Response) => {
     try {
         const { userId } = req.body;

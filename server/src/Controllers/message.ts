@@ -1,40 +1,55 @@
 import express from "express";
 import { Message } from "../models/message";
-import mongoose from "mongoose";
 
-export const reciveContent = async (req: express.Request, res: express.Response) => {
+// กำหนดเวลาส่งข้อความเป็น เที่ยงคืน 1 นาที (00:01 น.)
+const DEFAULT_SEND_HOUR = 0;  // เที่ยงคืน
+const DEFAULT_SEND_MINUTE = 1; // 1 นาที
+
+export const receiveContent = async (req: express.Request, res: express.Response) => {
     try {
-        const { userID, content } = req.body;
-
-        // ✅ ตรวจสอบค่าที่รับมา
-        if (!userID || !content) {
-            return res.status(400).json({ error: "กรุณากรอก userID และ content" });
+        const { userID, content, sendDate } = req.body;
+        
+        if (!userID || !content || !sendDate) {
+            return res.status(400).send({ status: "error", message: "Missing required fields" });
         }
 
-        // ✅ ตรวจสอบว่า `userID` เป็น ObjectId ที่ถูกต้อง
-        if (!mongoose.Types.ObjectId.isValid(userID)) {
-            return res.status(400).json({ error: "userID ไม่ถูกต้อง" });
+        // แปลง `sendDate` ให้เป็น Date Object
+        const scheduledDate = new Date(sendDate);
+        if (isNaN(scheduledDate.getTime())) {
+            return res.status(400).send({ status: "error", message: "Invalid sendDate format. Use YYYY-MM-DD" });
         }
 
-        // ✅ ตั้งค่า `sendDate` เป็น 1 ปีข้างหน้า
-        const currentDate = new Date();
-        currentDate.setFullYear(currentDate.getFullYear() + 1);
+        // กำหนดเวลาเป็น 15:52 น.
+        scheduledDate.setHours(DEFAULT_SEND_HOUR, DEFAULT_SEND_MINUTE, 0, 0);
 
-        // ✅ บันทึกข้อความลง MongoDB
-        const result = await new Message({
-            userID: new mongoose.Types.ObjectId(userID),
+        // Debug: ตรวจสอบค่าก่อนบันทึก
+        console.log("📆 sendDate before saving:", scheduledDate);
+        console.log("📩 Preparing to save message:", { userID, content, sendDate: scheduledDate });
+
+        const newMessage = new Message({
+            userID,
             content,
-            sendDate: currentDate,
-        }).save();
+            sendDate: scheduledDate, // บันทึกวันที่ + เวลา 00:01
+            status: false, // ยังไม่ถูกส่ง
+        });
 
-        return res.status(201).json({ 
+        const result = await newMessage.save();
+
+        // Debug: ตรวจสอบผลลัพธ์หลังบันทึก
+        console.log("✅ Save result:", result);
+
+        if (!result) {
+            return res.status(400).send({ status: "error", message: "Failed to save message" });
+        }
+
+        return res.send({
             status: "success",
-            message: "ข้อความถูกบันทึกเรียบร้อย",
-            data: result
+            message: `Message scheduled successfully at ${DEFAULT_SEND_HOUR}:${DEFAULT_SEND_MINUTE} on ${sendDate}`,
+            result,
         });
 
     } catch (error) {
-        console.error("❌ เกิดข้อผิดพลาดในการบันทึกข้อความ:", error);
-        return res.status(500).json({ error: "เกิดข้อผิดพลาดในเซิร์ฟเวอร์" });
+        console.error("❌ Error in receiveContent:", error);
+        return res.status(500).send({ status: "error", message: "Internal server error" });
     }
 };

@@ -7,6 +7,7 @@ const ReviewSchema = new mongoose.Schema({
     cardType: { type: String, enum: ["zodiac", "tarot"], required: true },
     cardName: { type: String, required: true },
     cardImage: { type: String, required: true },
+    zodiacMeaning: { type: String, default: null },  // ✅ เพิ่มฟิลด์นี้สำหรับ `zodiac`
     userPrediction: { type: String, required: true },
     timestamp: { type: Date, default: Date.now }
 }, { collection: "reviews" });

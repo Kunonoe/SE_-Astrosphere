@@ -18,7 +18,7 @@ const MessageSchema = new mongoose.Schema(
     content: {
       type: String,
       required: true, //บังคับกรอกมั้ย
-  },
+    },
   },
   { timestamps: true } //บันทึกเวลา
 );

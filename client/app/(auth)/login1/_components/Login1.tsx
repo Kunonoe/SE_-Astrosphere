@@ -1,7 +1,8 @@
 "use client";
 import { useState } from "react";
+import Link from 'next/link';
 import Image from 'next/image';
-import Logo from "@/assets/logo.png";
+import Logo from "@/assets/logo.png"
 import Gg from "@/assets/google.png";
 import { auth, provider } from "@/utils/firebase";
 import { signInWithPopup } from "firebase/auth";
@@ -17,7 +18,7 @@ export default function LoginPage() {
             if (!result.user) {
                 throw new Error("User not found in result");
             }
-            
+
             const idToken = await result.user.getIdToken();
             console.log("✅ ID Token:", idToken);
 
@@ -72,8 +73,8 @@ export default function LoginPage() {
                         <span className="mx-4 text-gray-300 text-sm">or</span>
                         <div className="flex-grow border-t border-gray-500"></div>
                     </div>
-                    <button 
-                        onClick={handleGoogleSignIn} 
+                    <button
+                        onClick={handleGoogleSignIn}
                         className="w-full flex items-center justify-center bg-white/20 text-white py-2 rounded-md hover:bg-white/30 transition">
                         <div className='flex justify-center items-center gap-3'>
                             <Image src={Gg} alt="Google" width={25} height={25} />
@@ -81,10 +82,15 @@ export default function LoginPage() {
                         </div>
                     </button>
                     <div className="flex justify-between items-center gap-5 mt-4 text-white text-sm">
-                        <span className="hover:underline cursor-pointer">Don't have an account?</span>
-                        <span className="hover:underline cursor-pointer">Forgot password?</span>
+                        <Link href="/register" className="hover:underline cursor-pointer">
+                            Don't have an account?
+                        </Link>
+
+                        <Link href="/forgetPassword" className="hover:underline cursor-pointer">
+                            Forgot password?
+                        </Link>
                     </div>
-                    <p className="text-gray-400 text-xs mt-5">©2025 AstrosphereTeams</p>
+                    <p className="text-gray-600 text-xs mt-5">©2025 AstrosphereTeams</p>
                 </div>
             </main>
         </div>

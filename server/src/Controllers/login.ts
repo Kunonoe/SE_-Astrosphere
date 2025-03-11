@@ -58,6 +58,10 @@ export const register = async (req: express.Request, res: express.Response) => {
             return res.status(400).json({ status: "error", message: "Name, Email, Password, and Confirm Password are required" });
         }
 
+        // ✅ ตรวจสอบความยาวของรหัสผ่าน
+        if (password.length < 6) {
+            return res.status(400).json({ status: "error", message: "Password must be at least 6 characters long" });
+        }
         // ✅ ตรวจสอบว่ารหัสผ่านกับยืนยันรหัสผ่านตรงกันหรือไม่
         if (password !== confirmpassword) {
             return res.status(400).json({ status: "error", message: "Passwords do not match" });
@@ -137,7 +141,7 @@ export const deleteAccount = async (req: express.Request, res: express.Response)
     }
 };
 
-// ฟังก์ชันสำหรับ Google Login
+// ✅ ฟังก์ชันสำหรับ Google Login + บันทึกลง MongoDB
 export const googleLogin = async (req: Request, res: Response) => {
     try {
         const { token } = req.body;
@@ -147,16 +151,33 @@ export const googleLogin = async (req: Request, res: Response) => {
         const decodedToken = await admin.auth().verifyIdToken(token);
         console.log("✅ Decoded Token:", decodedToken);
 
-        return res.status(200).json({
-            message: "Login Successful",
-            user: {
+        // 🔹 ตรวจสอบว่าผู้ใช้มีบัญชีอยู่แล้วหรือไม่
+        let user = await Account.findOne({ uid: decodedToken.uid });
+
+        if (!user) {
+            // 🔹 ถ้ายังไม่มีบัญชี → สร้างบัญชีใหม่
+            user = await Account.create({
                 uid: decodedToken.uid,
                 email: decodedToken.email,
                 name: decodedToken.name || "",
                 photo: decodedToken.picture || "",
+                createdAt: new Date(),
+            });
+            console.log("✅ บันทึกบัญชีใหม่ลง MongoDB:", user);
+        } else {
+            console.log("🔄 ผู้ใช้มีบัญชีอยู่แล้ว ไม่ต้องสร้างใหม่");
+        }
+
+        return res.status(200).json({
+            message: "Login Successful",
+            user: {
+                email: user.email,
+                username: user.username,
+                birthday: user.birthday
             },
         });
     } catch (error) {
+        console.error("❌ Authentication Failed:", error.message);
         return res.status(500).json({ message: "Authentication Failed", error: error.message });
     }
 };

@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation"; 
 import axios from "axios";
+import Image from 'next/image'
 
 export default function Showcard() {
   const [cardImage, setCardImage] = useState("");
@@ -35,7 +36,7 @@ export default function Showcard() {
       <div className="flex justify-center mx-20 p-10 w-full">
         
         <div className="relative w-[300px] h-[400px] rounded-5xl overflow-hidden shadow-5xl mr-10">
-          <img src={`/cards/${cardImage}.jpg`} alt={cardName} className="w-full h-full object-cover bg-white/30 rounded-2xl" />
+          <Image src={`/cards/${cardImage}.jpg`} alt={cardName} className="w-full h-full object-cover bg-white/30 rounded-2xl" />
         </div>
 
         {/* ช่องแสดงผลคำทำนาย */}

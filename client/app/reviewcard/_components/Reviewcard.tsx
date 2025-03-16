@@ -1,6 +1,7 @@
 "use client"
 // pages/astrosphere.js
 import { useState } from "react";
+import Image from 'next/image'
 
 export default function Astrosphere() {
   const [review, setReview] = useState("");
@@ -12,7 +13,7 @@ export default function Astrosphere() {
       <div className="flex md:flex-row justify-center items-center gap-6">
         {/* Astro Card */}
         <div className="w-80 p-4 bg-purple-800 border-2 border-purple-500 rounded-lg">
-          <img
+          <Image
             src="./card.jpg"
             alt="Astro Card"
             className="rounded-lg w-full"

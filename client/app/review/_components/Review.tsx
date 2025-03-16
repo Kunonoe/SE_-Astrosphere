@@ -1,5 +1,6 @@
 "use client"
 import { useState } from "react";
+import Image from 'next/image'
 
 export default function Astrosphere() {
   const [review, setReview] = useState("");
@@ -12,7 +13,7 @@ export default function Astrosphere() {
         {/* การ์ดหลัก */}
         <div className="w-56 p-4 bg-purple-800 border-2 border-purple-500 rounded-lg">
           <div className="p-4">
-            <img
+            <Image
               src="./card.jpg"//ใส่รูป
               alt="Astro Card"
               className="rounded-lg mb-2"

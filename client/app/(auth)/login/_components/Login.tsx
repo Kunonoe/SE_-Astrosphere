@@ -1,5 +1,6 @@
 "use client";
 import { useState } from 'react'
+import Link from 'next/link';
 import Image from 'next/image'
 import Logo from "@/assets/logo.png"
 
@@ -36,12 +37,20 @@ export default function page() {
                                 />
                             </div>
                     </div>
+                    <div className="flex justify-between items-center gap-5 mt-4 text-white text-sm">
+                        <Link href="/register" className="hover:underline cursor-pointer">
+                            Don't have an account?
+                        </Link>
 
-                    <div className='flex justify-between items-center gap-5 mt-2 text-white'>
-                        <span>Don't have an account?</span>
-                        <span>Forgot password?</span>
+                        <Link href="/forgetPassword" className="hover:underline cursor-pointer">
+                            Forgot password?
+                        </Link>
                     </div>
-                    <button className='px-5 py-2 bg-gray-300 font-bold rounded-lg mt-5'>Login</button>
+
+                    <button className="w-full mt-6 py-2 bg-purple-600 text-white font-semibold rounded-md hover:bg-purple-700 transition">
+                        Login
+                    </button>
+                    <p className="text-gray-600 text-xs mt-5">©2025 AstrosphereTeams</p>
                 </div>
             </main>
         </div>

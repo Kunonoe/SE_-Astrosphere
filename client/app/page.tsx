@@ -24,7 +24,7 @@ export default function Home() {
 
             <div className="flex-col md:flex-row hidden md:flex gap-5">
               <Link
-                href="/login1"
+                href="/login"
                 className="rounded-[20px] group relative bg-purple-600 font-semibold hover:bg-purple-700 transition px-5 py-3 text-lg text-white max-w-[200px]"
               >
                 Log In

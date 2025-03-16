@@ -1,11 +1,12 @@
 "use client";
 // import Image from "next/image";
 import Link from "next/link";
+import Image from 'next/image'
 import Tarot from "./tarot";
 
 export default function Home() {
   return (
-    <div className="w-full h-full flex justify-center items-center overflow-hidden bg-black">
+    <div className="w-full h-full flex justify-center items-center overflow-hidden">
       <main className="w-full h-[100vh] flex justify-around items-center relative px-20">
         <div className="flex items-center w-full h-full bg-cover bg-center relative">
 

@@ -11,8 +11,8 @@ import "./SubServer/croncounttime";
 const app : express.Express = express();
 
 app.use(cors({
-  origin: true,
-  credentials: true,
+  origin: process.env.CLIENT_URL || "http://localhost:3000", // ✅ ใส่ URL ของ Frontend
+  credentials: true, // ✅ เปิดให้ส่ง Cookie ไปกับ Request
 }));
 
 app.use(compression());

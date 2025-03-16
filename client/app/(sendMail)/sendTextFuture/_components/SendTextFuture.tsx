@@ -1,21 +1,99 @@
 "use client";
 import "./Hourglass.css";
 import { useState, useEffect } from "react";
-import { Calendar } from "lucide-react";
-import Swal from 'sweetalert2'
+import { Calendar, Clock } from "lucide-react";
+import Swal from "sweetalert2";
+import axios from "axios";
+import { getCookie } from "cookies-next"; // ✅ ใช้ cookies-next
+import { jwtDecode } from "jwt-decode";
+
+interface DecodedToken {
+    userId: string;
+}
 
 export default function SendTextFuture() {
-    const [message, setMessage] = useState(""); // สถานะข้อความ
-    const [date, setDate] = useState<string>("");
+    const [message, setMessage] = useState<string>(""); // ข้อความ
+    const [date, setDate] = useState<string>(""); // วันที่
+    const [loading, setLoading] = useState<boolean>(false);
+    const [userID, setUserID] = useState<string | null>(null);
 
+    // ✅ ดึง userID จาก Token ใน Cookie
     useEffect(() => {
-        const currentDate = new Date();
-        currentDate.setFullYear(currentDate.getFullYear() + 1);
-        const today = currentDate.toLocaleDateString("en-GB", {
-            day: "2-digit", month: "2-digit", year: "numeric"
-        });
-        setDate(today);
+        try {
+            const token = getCookie("token"); // ✅ ใช้ cookies-next ดึง Token
+            if (token) {
+                const decoded: DecodedToken = jwtDecode(token as string);
+                setUserID(decoded.userId); // ✅ เซ็ตค่า userID
+            }
+        } catch (error) {
+            console.error("❌ Failed to decode token:", error);
+        }
+
+        // ✅ ตั้งค่าวันที่เริ่มต้นเป็นพรุ่งนี้
+        const tomorrow = new Date();
+        tomorrow.setDate(tomorrow.getDate() + 1);
+        setDate(tomorrow.toISOString().split("T")[0]); // YYYY-MM-DD
     }, []);
+
+    const handleSendMessage = async () => {
+        if (!message.trim()) {
+            Swal.fire({
+                title: "Error",
+                text: "Please enter a message before sending!",
+                icon: "error",
+                confirmButtonColor: "#4527a0",
+            });
+            return;
+        }
+
+        if (!date) {
+            Swal.fire({
+                title: "Error",
+                text: "Please select a date and time for the message to be sent!",
+                icon: "error",
+                confirmButtonColor: "#4527a0",
+            });
+            return;
+        }
+
+        if (!userID) {
+            Swal.fire({
+                title: "Error",
+                text: "User not authenticated! Please log in again.",
+                icon: "error",
+                confirmButtonColor: "#4527a0",
+            });
+            return;
+        }
+
+        setLoading(true);
+
+        try {
+            await axios.post(
+                "http://localhost:5000/api/message",
+                { userID, content: message, sendDate: date }, // ✅ ส่ง `sendTime` และ `sendDate` ไปด้วย
+                { withCredentials: true } // ✅ ส่ง Cookie ไปกับ Request
+            );
+
+            Swal.fire({
+                title: "Successful!",
+                text: "Your message has been scheduled successfully! Thank you!",
+                icon: "success",
+                confirmButtonColor: "#4527a0",
+            });
+
+            setMessage(""); // รีเซ็ตข้อความหลังจากส่งสำเร็จ
+        } catch (error: any) {
+            Swal.fire({
+                title: "Error",
+                text: error.response?.data?.message || "Failed to schedule message",
+                icon: "error",
+                confirmButtonColor: "#4527a0",
+            });
+        } finally {
+            setLoading(false);
+        }
+    };
 
     return (
         <div className="w-full h-[90vh] flex flex-col justify-center items-center">
@@ -25,7 +103,6 @@ export default function SendTextFuture() {
             </h1>
 
             <main className="w-full h-full flex justify-center items-start mt-16 gap-56">
-
                 {/* นาฬิกาทราย */}
                 <div className="w-[300px] h-fit flex justify-center items-center scale-125 mt-10">
                     <div className="hourglass">
@@ -48,27 +125,29 @@ export default function SendTextFuture() {
                         onChange={(e) => setMessage(e.target.value)}
                     ></textarea>
 
-                    {/* วันที่ปัจจุบัน +1ปี */}
-                    <div className="flex items-center gap-2 mt-5 px-4 py-2 justify-between w-[350px] border bg-white/10 backdrop-blur-md rounded-lg text-white shadow-md">
-                        <span className="text-lg font-semibold">{date}</span>
-                        <Calendar size={20} className="text-white" />
+                    {/* วันที่และเวลา */}
+                    <div className="flex flex-col gap-3 mt-5">
+                        {/* Input วันที่ */}
+                        <div className="flex items-center gap-2 px-4 py-2 justify-between w-[350px] border bg-white/10 backdrop-blur-md rounded-lg text-white shadow-md">
+                            <input
+                                type="date"
+                                className="bg-transparent text-white focus:outline-none w-full"
+                                value={date}
+                                min={new Date().toISOString().split("T")[0]} // ✅ ห้ามเลือกวันที่ย้อนหลัง
+                                onChange={(e) => setDate(e.target.value)}
+                            />
+                            <Calendar size={20} className="text-white" />
+                        </div>
+
                     </div>
 
                     {/* ปุ่มส่ง */}
-                    <button className="mt-4 px-6 py-2 bg-purple-600 text-white rounded-lg shadow-md hover:bg-purple-700"
-                        onClick={() => {
-                            Swal.fire({
-                                title: "Successful!",
-                                text: '“Your email has been successfully scheduled to be sent next year!” Thank you!',
-                                icon: "success",
-                                background: "#ffffff",
-                                color: "#000000",
-                                confirmButtonColor: "#4527a0"
-                            });
-
-                        }}
+                    <button
+                        className="mt-4 px-6 py-2 bg-purple-600 text-white rounded-lg shadow-md hover:bg-purple-700 disabled:bg-gray-500"
+                        onClick={handleSendMessage}
+                        disabled={loading}
                     >
-                        Send
+                        {loading ? "Sending..." : "Send"}
                     </button>
                 </div>
             </main>

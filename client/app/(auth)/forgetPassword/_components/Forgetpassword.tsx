@@ -1,13 +1,54 @@
 "use client";
 import { useState } from 'react';
 import Image from 'next/image';
+import axios from 'axios';
 import Logo from "@/assets/logo.png";
 
 export default function ForgetPassword() {
     const [email, setEmail] = useState<string>("");
     const [otp, setOtp] = useState<string>("");
     const [password, setPassword] = useState<string>("");
-    const [confirmpassword, setConfirmPassword] = useState<string>("");
+    const [loading, setLoading] = useState<boolean>(false);
+    const [message, setMessage] = useState<string | null>(null);
+    const [error, setError] = useState<string | null>(null);
+
+    // ✅ ส่ง OTP ไปยังอีเมล
+    const handleSendOtp = async () => {
+        setLoading(true);
+        setError(null);
+        setMessage(null);
+
+        try {
+            const response = await axios.post("http://localhost:5000/api/request-otp", { email });
+
+            setMessage("OTP sent successfully! Check your email.");
+        } catch (err: any) {
+            setError(err.response?.data?.message || "Failed to send OTP");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    // ✅ ยืนยัน OTP และรีเซ็ตรหัสผ่าน
+    const handleResetPassword = async () => {
+        setLoading(true);
+        setError(null);
+        setMessage(null);
+
+        try {
+            const response = await axios.post("http://localhost:5000/api/update-password", {
+                email,
+                newpassword: password,
+                otp
+            });
+
+            setMessage("Password reset successful! You can now log in.");
+        } catch (err: any) {
+            setError(err.response?.data?.message || "Failed to reset password");
+        } finally {
+            setLoading(false);
+        }
+    };
 
     return (
         <div className='w-full h-[90vh] flex justify-center items-center'>
@@ -28,7 +69,13 @@ export default function ForgetPassword() {
                                     onChange={(e) => setEmail(e.target.value)}
                                 />
                             </div>
-                            <button className='px-5 py-2 bg-emerald-600 text-white font-bold rounded-lg mt-5'>Send</button>
+                            <button 
+                                className='px-5 py-2 bg-emerald-600 text-white font-bold rounded-lg mt-5'
+                                onClick={handleSendOtp}
+                                disabled={loading}
+                            >
+                                {loading ? "Sending..." : "Send OTP"}
+                            </button>
                         </div>
 
                         {/* OTP */}
@@ -44,27 +91,27 @@ export default function ForgetPassword() {
                         <div className='flex justify-center items-center gap-5'>
                             {/* Password */}
                             <div className='flex flex-col gap-1'>
-                                <span className='text-white'>Password : </span>
-                                <input type="password" name="password" placeholder='password'
+                                <span className='text-white'>New Password : </span>
+                                <input type="password" name="password" placeholder='Enter new password'
                                     className="w-[300px] rounded-md p-2 bg-white/20 backdrop-blur-md text-white placeholder-gray-300"
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                 />
                             </div>
-
-                            {/* Confirm Password */}
-                            <div className='flex flex-col gap-1'>
-                                <span className='text-white'>Confirm Password : </span>
-                                <input type="password" name="confirmPassword" placeholder='confirm password'
-                                    className="w-[300px] rounded-md p-2 bg-white/20 backdrop-blur-md text-white placeholder-gray-300"
-                                    value={confirmpassword}
-                                    onChange={(e) => setConfirmPassword(e.target.value)}
-                                />
-                            </div>
                         </div>
                     </div>
 
-                    <button className='px-5 py-2 bg-emerald-600 text-white font-bold rounded-lg mt-5'>Confirm</button>
+                    {/* Messages */}
+                    {message && <p className="text-green-500 mt-3">{message}</p>}
+                    {error && <p className="text-red-500 mt-3">{error}</p>}
+
+                    <button 
+                        className='px-5 py-2 bg-emerald-600 text-white font-bold rounded-lg mt-5'
+                        onClick={handleResetPassword}
+                        disabled={loading}
+                    >
+                        {loading ? "Resetting..." : "Confirm"}
+                    </button>
                 </div>
             </main>
         </div>

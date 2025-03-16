@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation"; 
 import Image from "next/image";
 import Link from "next/link";
+import { setCookie } from 'cookies-next/client';
 import Logo from "@/assets/logo.png";
 
 interface LoginResponse {
@@ -43,8 +44,11 @@ export default function LoginPage() {
       console.log("✅ Login Response:", data);
 
       if (data.status === "success" && data.token) {
-        localStorage.setItem("token", data.token); // Store token in localStorage
-        router.push("/menu"); // Redirect to menu page
+        // ✅ บันทึก Token ลงใน Cookies
+        setCookie('token', data.token);
+
+        router.push("/menu");
+        window.location.reload(); 
       } else {
         setError(data.message || "Login failed. Please try again.");
       }

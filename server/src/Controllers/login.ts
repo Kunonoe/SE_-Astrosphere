@@ -1,7 +1,6 @@
 import express from "express";
 import { Account } from "../models/login";
 import bcrypt from "bcrypt";
-import admin from "../database/firebaseAdmin"; // ✅ ใช้ Firebase Admin SDK
 import { Request, Response } from "express";  // ✅ ต้อง import จาก express
 import jwt, { SignOptions } from "jsonwebtoken";
 import config from "../config/auth_config";
@@ -82,6 +81,7 @@ export const login = async (req: Request<{}, {}, LoginRequestBody>, res: Respons
             config.JWT_SECRET, // ต้องเป็น string เท่านั้น
             { expiresIn } // ใช้ค่าที่กำหนดไว้อย่างถูกต้อง
         );
+        
 
         return res.status(200).json({
             status: "success",
@@ -195,47 +195,6 @@ export const deleteAccount = async (req: express.Request, res: express.Response)
     } catch (error) {
         console.error("Error deleting account:", error);
         return res.status(500).json({ status: "error", message: "Internal Server Error" });
-    }
-};
-
-// ✅ ฟังก์ชันสำหรับ Google Login + บันทึกลง MongoDB
-export const googleLogin = async (req: Request, res: Response) => {
-    try {
-        const { token } = req.body;
-        if (!token) return res.status(400).json({ message: "Token is required" });
-
-        // 🔹 ตรวจสอบ Token ผ่าน Firebase Admin SDK
-        const decodedToken = await admin.auth().verifyIdToken(token);
-        console.log("✅ Decoded Token:", decodedToken);
-
-        // 🔹 ตรวจสอบว่าผู้ใช้มีบัญชีอยู่แล้วหรือไม่
-        let user = await Account.findOne({ uid: decodedToken.uid });
-
-        if (!user) {
-            // 🔹 ถ้ายังไม่มีบัญชี → สร้างบัญชีใหม่
-            user = await Account.create({
-                uid: decodedToken.uid,
-                email: decodedToken.email,
-                name: decodedToken.name || "",
-                photo: decodedToken.picture || "",
-                createdAt: new Date(),
-            });
-            console.log("✅ บันทึกบัญชีใหม่ลง MongoDB:", user);
-        } else {
-            console.log("🔄 ผู้ใช้มีบัญชีอยู่แล้ว ไม่ต้องสร้างใหม่");
-        }
-
-        return res.status(200).json({
-            message: "Login Successful",
-            user: {
-                email: user.email,
-                username: user.username,
-                birthday: user.birthday
-            },
-        });
-    } catch (error) {
-        console.error("❌ Authentication Failed:", error.message);
-        return res.status(500).json({ message: "Authentication Failed", error: error.message });
     }
 };
 

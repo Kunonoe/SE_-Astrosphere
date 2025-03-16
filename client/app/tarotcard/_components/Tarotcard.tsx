@@ -2,11 +2,16 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation"; 
 import Image from 'next/image'
-import Logo from "@/assets/logo.png"
 import cardBack from "@/assets/card.jpg";
 
+interface TarotCard {
+  cardID: number;
+  name: string;
+  description?: string;
+}
+
 export default function CardPicker() {
-  const [cards, setCards] = useState<any[]>([]);
+  const [cards, setCards] = useState<TarotCard[]>([]);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const router = useRouter();
 
@@ -43,7 +48,7 @@ export default function CardPicker() {
         {
           cards.map((card, index) => (
             <div
-              key={index}
+              key={card.cardID}
               className="relative w-24 h-36 cursor-pointer transform transition duration-300"
               onMouseEnter={() => setHoveredIndex(index)}
               onMouseLeave={() => setHoveredIndex(null)}
@@ -51,7 +56,7 @@ export default function CardPicker() {
             >
               <Image
                 src={cardBack} 
-                alt={card.cardID}
+                alt={`Tarot Card ${card.cardID}`}
                 layout="fill"
                 objectFit="cover"
                 className={`rounded-lg shadow-lg ${hoveredIndex === index ? "scale-110" : "scale-100"}`}

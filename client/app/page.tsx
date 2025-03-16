@@ -18,7 +18,7 @@ export default function Home() {
             </h1>
 
             <p className="text-[20px] text-gray-200 hidden md:block">
-              Empowering you to understand life's journey through the stars above.
+              Empowering you to understand life is journey through the stars above.
               Experience the fusion of astrology and astronomy, lighting the way to your inspiration.
             </p>
 

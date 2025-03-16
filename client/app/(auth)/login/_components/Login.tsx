@@ -97,7 +97,7 @@ export default function LoginPage() {
           {/* Links */}
           <div className="flex justify-between items-center gap-5 mt-4 text-white text-sm">
             <Link href="/register" className="hover:underline cursor-pointer">
-              Don't have an account?
+              Do not have an account?
             </Link>
             <Link href="/forgetPassword" className="hover:underline cursor-pointer">
               Forgot password?

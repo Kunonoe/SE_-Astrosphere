@@ -9,26 +9,27 @@ export default function Showcard() {
   const [cardImage, setCardImage] = useState("");
   const [cardName, setCardName] = useState("");
   const [prediction, setPrediction] = useState("");
-  const searchParams = useSearchParams();
-  const cardID = searchParams.get("id"); 
-
+  const searchParams = useSearchParams(); 
+  const birthdate = searchParams.get("birthdate");
+  const birthtime = searchParams.get("birthtime"); 
   useEffect(() => {
-    if (!cardID) return; 
-
     const fetchCardData = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/gettarot/${cardID}`);
-        const cardData = response.data;
-        setCardImage(cardData.cardPHOTO);
-        setCardName(cardData.cardNAME);
-        setPrediction(cardData.cardMEANING);
+        const response = await axios.post(`http://localhost:5000/api/zodiac`,{
+            birthdate: birthdate,
+            birthtime: birthtime
+        },{});
+        const zodiacdata = response.data;
+        setCardImage(zodiacdata.zodiacImage);
+        setCardName(zodiacdata.englishZodiac);
+        setPrediction(zodiacdata.zodiacPrediction);
       } catch (error) {
         console.error("❌ Error fetching card data:", error);
       }
     };
 
     fetchCardData();
-  }, [cardID]);
+  }, [birthdate,birthtime]);
 
   return (
     <div className="min-h-screen text-white flex flex-col items-center justify-center p-4">

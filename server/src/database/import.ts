@@ -4,7 +4,7 @@ import csvParser from 'csv-parser';
 import { MongoClient } from 'mongodb';
 
 // 🔹 ตั้งค่าการเชื่อมต่อ MongoDB
-const uri: string = 'mongodb://localhost:27017';
+const uri: string = process.env.MONGO_URL;
 const dbName: string = 'cardDB'; // ✅ ใช้ database เดิม
 const collections = {
     zodiac: 'zodiac_cards', // ✅ เปลี่ยนจาก feature1 → zodiac

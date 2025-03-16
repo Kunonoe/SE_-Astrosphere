@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createReview, updateReview, deleteReview, getAllReviews, getUserReviewHistory } from "../controllers/review";
+import { createReview, updateReview, deleteReview, getAllReviews, getUserReviewHistory } from "../Controllers/review";
 
 export default (router: Router) => {
     router.post('/reviews', createReview);//เขียนรีวิว

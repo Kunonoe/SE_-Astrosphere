@@ -3,6 +3,8 @@ import { Account } from "../models/login";
 import bcrypt from "bcrypt";
 import admin from "../database/firebaseAdmin"; // ✅ ใช้ Firebase Admin SDK
 import { Request, Response } from "express";  // ✅ ต้อง import จาก express
+import jwt from "jsonwebtoken";
+import config from "../config/auth_config";
 
 export const showUsers = async (req: express.Request, res: express.Response) => {
     try {
@@ -23,7 +25,7 @@ export const showUsers = async (req: express.Request, res: express.Response) => 
 export const login = async (req: express.Request, res: express.Response) => {
     try {
         const {name,password } = req.body;
-
+        const JWT_SECRET = "@S3CR3T"
         // ค้นหาผู้ใช้จากฐานข้อมูล
         const user = await Account.findOne({ username: name });
         console.log("Input password:", password);
@@ -35,15 +37,19 @@ export const login = async (req: express.Request, res: express.Response) => {
 
         // ตรวจสอบรหัสผ่าน
         const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch) {
+        if(isMatch){
+            const token = jwt.sign(
+                { userId: user._id, username: user.username }, 
+                JWT_SECRET,
+                { expiresIn: "1h" } // กำหนดเวลาให้ Token มีอายุ 1 ชั่วโมง
+            );
+            return res.send({
+                status: "success",
+                message: "Login successful"
+            });
+        }else{
             return res.status(400).send({ status: "error", message: "Incorrect password" });
         }
-
-        return res.send({
-            status: "success",
-            message: "Login successful"
-        });
-
     } catch (error) {
         console.log(error);
         return res.sendStatus(400);

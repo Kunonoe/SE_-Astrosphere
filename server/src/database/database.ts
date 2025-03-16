@@ -1,14 +1,18 @@
 import mongoose from "mongoose";
+let isConnected = false;
 const connectDB = async () => {
+    if (isConnected) {
+        console.log("MongoDB Already Connected");
+        return;
+    }
     try {
-        await mongoose.connect(process.env.MONGO_URL);
-        console.log("✅ MongoDB Connected to:", process.env.MONGO_URL);
-
-        // ทดสอบว่ามีข้อมูลราศีอยู่ใน Database หรือไม่
-        const allZodiacs = await mongoose.connection.db.collection("zodiac_cards").find().toArray();
-        console.log("🔍 ข้อมูลราศีที่มีอยู่ใน MongoDB:", allZodiacs);
+        const db = await mongoose.connect(process.env.MONGO_URL);
+        isConnected = db.connections[0].readyState === 1;
+        console.log("MongoDB Connected to:", process.env.MONGO_URL);
     } catch (error) {
-        console.error("❌ MongoDB Connection Failed:", error);
+        console.error("MongoDB Connection Failed:", error);
         process.exit(1);
     }
 };
+
+export default connectDB;

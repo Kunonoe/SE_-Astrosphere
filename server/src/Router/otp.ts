@@ -1,5 +1,5 @@
 import express from "express";
-import { requestOTP, updatePassword } from "../controllers/otp";
+import { requestOTP, updatePassword } from "../Controllers/otp";
 
 export default (router: express.Router) => {
     

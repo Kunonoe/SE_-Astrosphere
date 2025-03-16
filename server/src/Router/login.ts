@@ -1,7 +1,7 @@
 import express from "express";
-import {login, register, deleteAccount, showUsers, updateProfile, resetPassword  } from "../controllers/login";
-import {requestOTP , updatePassword}from "../controllers/otp";
-import { googleLogin } from "../controllers/login";
+import {login, register, deleteAccount, showUsers, updateProfile, resetPassword  } from "../Controllers/login";
+import {requestOTP , updatePassword}from "../Controllers/otp";
+import { googleLogin } from "../Controllers/login";
 
 export default (router: express.Router) => {
     router.get('/product',showUsers)//ดึงข้อมูลมา

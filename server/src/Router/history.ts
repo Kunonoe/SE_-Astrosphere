@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getUserHistory } from "../controllers/history";
+import { getUserHistory } from "../Controllers/history";
 
 export default (router: Router) => {
     // ✅ API ดูประวัติการใช้งานของผู้ใช้

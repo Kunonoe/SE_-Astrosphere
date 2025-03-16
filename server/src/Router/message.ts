@@ -1,4 +1,4 @@
-import { receiveContent } from "../controllers/message"; // ฟังก์ชันบันทึกข้อความ
+import { receiveContent } from "../Controllers/message"; // ฟังก์ชันบันทึกข้อความ
 import { sendScheduledMessages } from "../SubServer/sendmessages"; // ฟังก์ชันส่งข้อความ
 import express from "express";
 

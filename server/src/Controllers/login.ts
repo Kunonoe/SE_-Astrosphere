@@ -3,7 +3,7 @@ import { Account } from "../models/login";
 import bcrypt from "bcrypt";
 import admin from "../database/firebaseAdmin"; // ✅ ใช้ Firebase Admin SDK
 import { Request, Response } from "express";  // ✅ ต้อง import จาก express
-import jwt from "jsonwebtoken";
+import jwt, { SignOptions } from "jsonwebtoken";
 import config from "../config/auth_config";
 
 export const showUsers = async (req: express.Request, res: express.Response) => {
@@ -22,63 +22,108 @@ export const showUsers = async (req: express.Request, res: express.Response) => 
     }
 };
 
-export const login = async (req: express.Request, res: express.Response) => {
+interface LoginRequestBody {
+    name: string;
+    password: string;
+}
+
+interface LoginResponseBody {
+    status: string;
+    message: string;
+    token?: string;
+    user?: {
+        id: string;
+        username: string;
+        email?: string;
+    };
+}
+
+export const login = async (req: Request<{}, {}, LoginRequestBody>, res: Response<LoginResponseBody>) => {
     try {
-        const {name,password } = req.body;
-        const JWT_SECRET = "@S3CR3T"
+        const { name, password } = req.body;
+
+        if (!name || !password) {
+            return res.status(400).json({ status: "error", message: "Username and password are required" });
+        }
+
         // ค้นหาผู้ใช้จากฐานข้อมูล
         const user = await Account.findOne({ username: name });
-        console.log("Input password:", password);
-        console.log("Stored hashed password:", user.password);
-
         if (!user) {
-            return res.status(400).send({ status: "error", message: "User not found" });
+            return res.status(400).json({ status: "error", message: "User not found" });
         }
 
         // ตรวจสอบรหัสผ่าน
         const isMatch = await bcrypt.compare(password, user.password);
-        if(isMatch){
-            const token = jwt.sign(
-                { userId: user._id, username: user.username }, 
-                JWT_SECRET,
-                { expiresIn: "1h" } // กำหนดเวลาให้ Token มีอายุ 1 ชั่วโมง
-            );
-            return res.send({
-                status: "success",
-                message: "Login successful"
-            });
-        }else{
-            return res.status(400).send({ status: "error", message: "Incorrect password" });
+        if (!isMatch) {
+            return res.status(400).json({ status: "error", message: "Incorrect password" });
         }
+
+        // ตรวจสอบว่า JWT_SECRET ถูกกำหนดและเป็น string
+        if (!config.JWT_SECRET || typeof config.JWT_SECRET !== "string") {
+            throw new Error("JWT_SECRET is not set or is invalid");
+        }
+
+        // กำหนด expiresIn ให้ถูกต้องตามประเภทที่ jwt.sign รองรับ
+        let expiresIn: SignOptions["expiresIn"];
+        if (typeof config.TOKEN_EXPIRATION === "number") {
+            expiresIn = config.TOKEN_EXPIRATION;
+        } else if (typeof config.TOKEN_EXPIRATION === "string") {
+            expiresIn = parseInt(config.TOKEN_EXPIRATION, 10);
+            if (isNaN(expiresIn)) {
+                expiresIn = "1h"; // หาก parsing ล้มเหลว ใช้ค่า default
+            }
+        } else {
+            expiresIn = "1h"; // ค่า default
+        }
+
+        // สร้าง JWT Token อย่างถูกต้อง
+        const token: string = jwt.sign(
+            { userId: user._id.toString(), username: user.username },
+            config.JWT_SECRET, // ต้องเป็น string เท่านั้น
+            { expiresIn } // ใช้ค่าที่กำหนดไว้อย่างถูกต้อง
+        );
+
+        return res.status(200).json({
+            status: "success",
+            message: "Login successful",
+            token,
+            user: {
+                id: user._id.toString(),
+                username: user.username,
+                email: user.email, // ส่งข้อมูล user ไปให้ frontend
+            },
+        });
     } catch (error) {
-        console.log(error);
-        return res.sendStatus(400);
+        console.error("Login error:", error);
+        return res.status(500).json({ status: "error", message: "Internal server error" });
     }
 };
+
 export const register = async (req: express.Request, res: express.Response) => {
     try {
-        let { name, firstname, lastname, email, password, confirmpassword, birthday } = req.body;
+        let { username, firstname, lastname, email, password, confirmpassword, birthday } = req.body;
 
-        // ✅ ตรวจสอบว่าข้อมูลที่จำเป็นถูกส่งมาครบถ้วน
-        if (!name || !email || !password || !confirmpassword ) {
-            return res.status(400).json({ status: "error", message: "Name, Email, Password, and Confirm Password are required" });
+        // ✅ Validate required fields
+        if (!username || !email || !password || !confirmpassword) {
+            return res.status(400).json({ status: "error", message: "Username, Email, Password, and Confirm Password are required" });
         }
 
-        // ✅ ตรวจสอบความยาวของรหัสผ่าน
+        // ✅ Validate password length
         if (password.length < 6) {
             return res.status(400).json({ status: "error", message: "Password must be at least 6 characters long" });
         }
-        // ✅ ตรวจสอบว่ารหัสผ่านกับยืนยันรหัสผ่านตรงกันหรือไม่
+
+        // ✅ Ensure passwords match
         if (password !== confirmpassword) {
             return res.status(400).json({ status: "error", message: "Passwords do not match" });
         }
 
-        // ✅ แปลง email เป็น lowercase ป้องกันปัญหาการสมัครซ้ำเนื่องจากตัวพิมพ์
-        email = email.toLowerCase();
+        // ✅ Convert email to lowercase and trim spaces
+        email = email.toLowerCase().trim();
 
-        // ✅ ตรวจสอบว่าผู้ใช้มีอยู่แล้วหรือไม่
+        // ✅ Check if the user already exists
         const existingUser = await Account.findOne({
-            $or: [{ username: name }, { email: email }]
+            $or: [{ username }, { email }]
         });
 
         if (existingUser) {
@@ -88,18 +133,23 @@ export const register = async (req: express.Request, res: express.Response) => {
             });
         }
 
-        // ✅ เข้ารหัสรหัสผ่านก่อนบันทึก
+        // ✅ Hash password
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
-        // ✅ สร้างบัญชีใหม่ และบันทึกลง MongoDB
+        // ✅ Set default birthday if not provided
+        if (!birthday) {
+            birthday = "2000-01-01"; // Set a more realistic default
+        }
+
+        // ✅ Create new user
         const newUser = new Account({
-            username: name,
-            firstname: firstname,
-            lastname: lastname,
-            email: email,
+            username,
+            firstname: firstname?.trim() || "",
+            lastname: lastname?.trim() || "",
+            email,
             password: hashedPassword,
-            birthday: birthday,
+            birthday,
         });
 
         await newUser.save();
@@ -108,6 +158,7 @@ export const register = async (req: express.Request, res: express.Response) => {
             status: "success",
             message: "User registered successfully",
             user: {
+                _id: newUser._id,  // Include user ID for frontend usage
                 username: newUser.username,
                 email: newUser.email
             }

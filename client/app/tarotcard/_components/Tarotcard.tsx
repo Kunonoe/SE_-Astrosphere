@@ -1,10 +1,10 @@
 "use client";
-
-import Image from "next/image";
 import { useState, useEffect } from "react";
-import cardBack from "@/assets/card.jpg";
 import { useRouter } from "next/navigation"; 
-import Loading from "../../loading"
+import Image from 'next/image'
+import Logo from "@/assets/logo.png"
+import cardBack from "@/assets/card.jpg";
+
 export default function CardPicker() {
   const [cards, setCards] = useState<any[]>([]);
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);

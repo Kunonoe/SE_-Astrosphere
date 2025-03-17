@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
 import { Tarot } from "../models/tarocard";
-import { UserHistory } from "../models/userHistory";
 import connectDB from "../database/database"
 
 // ✅ ฟังก์ชันสุ่มไพ่ทาโรต์ 3 ใบ
@@ -23,22 +22,6 @@ export const drawTarot = async (req: Request, res: Response) => {
         // ✅ สุ่มไพ่ 1 ใบ (แบบเดียวกับราศีที่แสดง 1 ค่า)
         const selectedCards = shuffled.slice(0, 3);
 
-        // console.log("✅ ไพ่ที่สุ่มได้:", selectedCards);
-        // // 🔹 บันทึกลง `user_history`
-        const historyEntry = await UserHistory.create({
-            userID,
-            type: "tarot",
-            tarotName1: selectedCards[0].cardNAME,
-            tarotPrediction1: selectedCards[0].cardMEANING,
-            tarotImage1: selectedCards[0].cardPHOTO,
-            tarotName2: selectedCards[1].cardNAME,
-            tarotPrediction2: selectedCards[1].cardMEANING,
-            tarotImage2: selectedCards[1].cardPHOTO,
-            tarotName3: selectedCards[2].cardNAME,
-            tarotPrediction3: selectedCards[2].cardMEANING,
-            tarotImage3: selectedCards[2].cardPHOTO
-        });
-
         return res.json({
             message: "สุ่มไพ่สำเร็จและบันทึกประวัติแล้ว",
             userID,
@@ -59,7 +42,6 @@ export const drawTarot = async (req: Request, res: Response) => {
                     tarotImage: selectedCards[2].cardPHOTO
                 }
             ],
-            historyID: historyEntry._id
         });
     } catch (error) {
         console.error("❌ เกิดข้อผิดพลาดในการสุ่มไพ่", error.message);

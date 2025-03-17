@@ -1,13 +1,11 @@
 import express from "express";
-import {login, register, deleteAccount, showUsers, updateProfile, resetPassword  } from "../Controllers/login";
+import {login, register,  showUsers,  resetPassword  } from "../Controllers/login";
 import {requestOTP , updatePassword}from "../Controllers/otp";
 
 export default (router: express.Router) => {
-    router.get('/product',showUsers)//ดึงข้อมูลมา
+    router.get('/showuser',showUsers)//ดึงข้อมูลมา
     router.post('/login',login)
     router.post('/register',register)
-    router.delete('/deleteID',deleteAccount)
-    router.post('/updateprofile',updateProfile)
     router.post('/reset',resetPassword)
     //router.put() อัปเดตข้อมูล
     

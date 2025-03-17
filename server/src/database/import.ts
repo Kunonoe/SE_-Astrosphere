@@ -2,17 +2,28 @@ import fs from 'fs';
 import path from 'path';
 import csvParser from 'csv-parser';
 import { MongoClient } from 'mongodb';
+import dotenv from 'dotenv';
 
-// 🔹 ตั้งค่าการเชื่อมต่อ MongoDB
-const uri: string = process.env.MONGO_URL;
-const dbName: string = 'cardDB'; // ✅ ใช้ database เดิม
+// ✅ โหลดไฟล์ .env
+dotenv.config();
+
+console.log("🔹 MONGO_URL:", process.env.MONGO_URL); // ✅ เช็คว่า MONGO_URL ถูกโหลดไหม
+
+const uri: string | undefined = process.env.MONGO_URL;
+
+if (!uri) {
+    throw new Error("❌ MONGO_URL is not defined. Please check your .env file.");
+}
+
+const dbName: string = 'cardDB';
 const collections = {
-    zodiac: 'zodiac_cards', // ✅ เปลี่ยนจาก feature1 → zodiac
-    tarot: 'tarot_cards'     // ✅ เปลี่ยนจาก feature2 → tarot
+    zodiac: 'zodiac_cards',
+    tarot: 'tarot_cards'
 };
 
 // สร้าง MongoDB Client
 const client = new MongoClient(uri);
+
 
 // Interface สำหรับข้อมูลการ์ด
 interface Card {

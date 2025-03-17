@@ -19,13 +19,10 @@ export default function Zodiactable() {
 
   const handleCheckZodiac = async () => {
     setLoading(true);
-    setError(null);
     setZodiacResult(null);
 
     try {
       router.push(`/showZodiac?birthdate=${date}&birthtime=${time}`); 
-    } catch (error) {
-      setError("An unknown error occurred");
     } finally {
       setLoading(false);
     }
@@ -58,7 +55,6 @@ export default function Zodiactable() {
       >
         {loading ? "Checking..." : "Done"}
       </button>
-      {error && <p className="text-red-500 mt-3">{error}</p>}
       {zodiacResult && <p className="text-green-500 mt-3">Your Zodiac Sign: {zodiacResult}</p>}
     </div>
   );

@@ -1,7 +1,7 @@
 "use client";
 import "./Hourglass.css";
 import { useState, useEffect } from "react";
-import { Calendar, Clock } from "lucide-react";
+
 import Swal from "sweetalert2";
 import axios from "axios";
 import { getCookie } from "cookies-next"; // ✅ ใช้ cookies-next
@@ -83,13 +83,22 @@ export default function SendTextFuture() {
             });
 
             setMessage(""); // รีเซ็ตข้อความหลังจากส่งสำเร็จ
-        } catch (error: any) {
-            Swal.fire({
-                title: "Error",
-                text: error.response?.data?.message || "Failed to schedule message",
-                icon: "error",
-                confirmButtonColor: "#4527a0",
-            });
+        } catch (error: unknown) {
+            if (axios.isAxiosError(error)) {
+                Swal.fire({
+                    title: "Error",
+                    text: error.response?.data?.message || "Failed to schedule message",
+                    icon: "error",
+                    confirmButtonColor: "#4527a0",
+                });
+            } else {
+                Swal.fire({
+                    title: "Error",
+                    text: "An unexpected error occurred",
+                    icon: "error",
+                    confirmButtonColor: "#4527a0",
+                });
+            }
         } finally {
             setLoading(false);
         }
@@ -136,7 +145,6 @@ export default function SendTextFuture() {
                                 min={new Date().toISOString().split("T")[0]} // ✅ ห้ามเลือกวันที่ย้อนหลัง
                                 onChange={(e) => setDate(e.target.value)}
                             />
-                            <Calendar size={20} className="text-white" />
                         </div>
 
                     </div>

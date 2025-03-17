@@ -17,7 +17,7 @@ export default function ForgetPassword() {
         setError(null);
         setMessage(null);
         try {
-            await axios.post("http://localhost:5000/api/request-otp", { email });
+            const response = await axios.post("http://localhost:5000/api/request-otp", { email });
             setMessage("OTP sent successfully! Check your email.");
         } catch (err: any) {
             setError(err.response?.data?.message || "Failed to send OTP");
@@ -31,7 +31,7 @@ export default function ForgetPassword() {
         setError(null);
         setMessage(null);
         try {
-            await axios.post("http://localhost:5000/api/update-password", {
+            const response = await axios.post("http://localhost:5000/api/update-password", {
                 email,
                 newpassword: password,
                 otp

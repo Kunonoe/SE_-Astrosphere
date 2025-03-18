@@ -5,22 +5,6 @@ import { Request, Response } from "express";
 import jwt, { SignOptions } from "jsonwebtoken";
 import config from "../config/auth_config";
 
-export const showUsers = async (req: express.Request, res: express.Response) => {
-    try {
-        // ดึงเฉพาะ username จากฐานข้อมูล
-        const users = await Account.find({}, "username");
-
-        return res.send({
-            status: "success",
-            users: users.map(user => user.username) 
-        });
-
-    } catch (error) {
-        console.log(error);
-        return res.sendStatus(400);
-    }
-};
-
 interface LoginRequestBody {
     name: string;
     password: string;
@@ -205,5 +189,20 @@ export const resetPassword = async (req: express.Request, res: express.Response)
     } catch (error) {
         console.error("Error resetting password:", error);
         return res.status(500).json({ status: "error", message: "Internal Server Error" });
+    }
+};
+export const showUsers = async (req: express.Request, res: express.Response) => {
+    try {
+        // ดึงเฉพาะ username จากฐานข้อมูล
+        const users = await Account.find({}, "username");
+
+        return res.send({
+            status: "success",
+            users: users.map(user => user.username) 
+        });
+
+    } catch (error) {
+        console.log(error);
+        return res.sendStatus(400);
     }
 };

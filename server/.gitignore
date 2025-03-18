@@ -1,5 +1,4 @@
 /node_modules
 .env
-# Ignore Firebase Admin Service Account Key
-my-astrosphere-project-firebase-adminsdk-fbsvc-95e7a3b88f.json
+
 

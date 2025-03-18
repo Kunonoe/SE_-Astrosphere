@@ -2,8 +2,8 @@ import express from "express";
 import { Message } from "../models/message";
 
 // กำหนดเวลาส่งข้อความเป็น เที่ยงคืน 1 นาที (00:01 น.)
-const DEFAULT_SEND_HOUR = 12;  // เที่ยงคืน
-const DEFAULT_SEND_MINUTE = 18; // 1 นาที
+const DEFAULT_SEND_HOUR = 0;  // เที่ยงคืน
+const DEFAULT_SEND_MINUTE = 1; // 1 นาที
 
 export const receiveContent = async (req: express.Request, res: express.Response) => {
     try {
@@ -19,7 +19,6 @@ export const receiveContent = async (req: express.Request, res: express.Response
             return res.status(400).send({ status: "error", message: "Invalid sendDate format. Use YYYY-MM-DD" });
         }
 
-        // กำหนดเวลาเป็น 15:52 น.
         scheduledDate.setHours(DEFAULT_SEND_HOUR, DEFAULT_SEND_MINUTE, 0, 0);
 
         // Debug: ตรวจสอบค่าก่อนบันทึก

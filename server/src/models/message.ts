@@ -1,4 +1,4 @@
-import mongoose from "mongoose"; //เหมือนคีเอตใน SQL
+import mongoose from "mongoose"; 
 
 const MessageSchema = new mongoose.Schema(
   {
@@ -13,11 +13,11 @@ const MessageSchema = new mongoose.Schema(
     },
     sendDate: {
         type: Date,
-        required: true, //บังคับกรอกมั้ย
+        required: true, 
     },
     content: {
       type: String,
-      required: true, //บังคับกรอกมั้ย
+      required: true, 
     },
   },
   { timestamps: true } //บันทึกเวลา

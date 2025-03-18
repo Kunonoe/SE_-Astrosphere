@@ -4,9 +4,9 @@ const accountSchema = new mongoose.Schema({
     username: { type: String, required: true, unique: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
-    firstname: { type: String },  // ✅ เพิ่มชื่อจริง
-    lastname: { type: String },   // ✅ เพิ่มนามสกุล
-    birthday: { type: String },   // ✅ เพิ่มวันเกิด
+    firstname: { type: String },  
+    lastname: { type: String },  
+    birthday: { type: String },   
 }, { timestamps: true });
 
 export const Account = mongoose.model("Account", accountSchema);

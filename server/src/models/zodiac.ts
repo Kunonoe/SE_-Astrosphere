@@ -4,7 +4,6 @@ const ZodiacSchema = new mongoose.Schema({
     cardNAME: String,
     cardMEANING: String,
     cardPHOTO: String
-}, { collection: "zodiac_cards" }); // ✅ เชื่อมกับ Collection `zodiac_cards`
+}, { collection: "zodiac_cards" }); //  เชื่อมกับ Collection `zodiac_cards`
 
-console.log("✅ ใช้ Collection: zodiac_cards");
 export const Zodiac = mongoose.model("Zodiac", ZodiacSchema);

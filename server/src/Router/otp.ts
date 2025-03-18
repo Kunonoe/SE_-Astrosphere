@@ -7,6 +7,6 @@ export default (router: express.Router) => {
 router.post("/request-otp",requestOTP); //ขอ OTP
 
 // อัปเดตรหัสผ่านโดยใช้ OTP
-router.post("/update-password",updatePassword); //อัปเดตรหัสผ่านหลังจากตรวจสอบ OTP
+router.post("/update-password",updatePassword); 
 
 }

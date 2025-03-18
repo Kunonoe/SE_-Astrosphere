@@ -4,7 +4,6 @@ const TarotSchema = new mongoose.Schema({
     cardNAME: String,
     cardMEANING: String,
     cardPHOTO: String
-}, { collection: "tarot_cards" }); // ✅ เชื่อมกับ Collection `zodiac_cards`
+}, { collection: "tarot_cards" }); //  เชื่อมกับ Collection `zodiac_cards`
 
-console.log("✅ ใช้ Collection: tarot_cards");
 export const Tarot = mongoose.model("Tarot", TarotSchema);

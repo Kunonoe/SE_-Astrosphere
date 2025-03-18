@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation"; 
 import Image from "next/image";
 import Link from "next/link";
@@ -45,15 +45,15 @@ export default function LoginPage() {
 
       if (data.status === "success" && data.token) {
         // ✅ บันทึก Token ลงใน Cookies
-        setCookie('token', data.token);
-
-        router.push("/menu");
-        window.location.reload(); 
+        if (typeof window !== "undefined") {
+          setCookie('token', data.token);
+        }
+        router.replace("/menu"); 
       } else {
         setError(data.message || "Login failed. Please try again.");
       }
     } catch (error) {
-      setError(error instanceof Error ? error.message : "An unknown error occurred");
+      setError(error instanceof Error ? error.message : "Duplicate username");
     } finally {
       setLoading(false);
     }

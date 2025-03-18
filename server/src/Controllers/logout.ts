@@ -2,7 +2,7 @@ import express from "express";
 
 export const logout = async (req: express.Request, res: express.Response) => {
     try {
-        // ✅ ลบ Token (JWT) ออกจาก Client
+        //  ลบ Token (JWT) ออกจาก Client
         res.clearCookie("token"); // ใช้ถ้าคุณเก็บ JWT ไว้ใน Cookie
         return res.status(200).json({ status: "success", message: "Logged out successfully" });
 

@@ -10,8 +10,8 @@ export default (router: express.Router) => {
     //router.put() อัปเดตข้อมูล
     
     // 📌 เพิ่ม API สำหรับ OTP โดยตรงที่ index.ts
-    router.post("/request-otp",requestOTP);  // ✅ ใช้ requestOTP
-    router.post("/update-password",updatePassword);  // ✅ ใช้ updatePassword
+    router.post("/request-otp",requestOTP);  //  ใช้ requestOTP
+    router.post("/update-password",updatePassword);  //  ใช้ updatePassword
 
 
 }

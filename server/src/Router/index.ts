@@ -7,8 +7,6 @@ import zodiac from "./zodiac";
 import tarot from "./tarot";
 import "../SubServer/croncounttime";
 
-
-
 const router = express.Router();
 
 export default ()=> {

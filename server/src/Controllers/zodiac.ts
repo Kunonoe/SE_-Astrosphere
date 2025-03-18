@@ -1,8 +1,7 @@
 import { Request, Response } from 'express';
 import { Zodiac } from '../models/zodiac';
-import { Account } from "../models/login";
 import { zodiacTable, timeSlots, zodiacMapping } from "../utils/zodiacData";
-import connectDB from "../database/database";
+
 
 export const calculateZodiacAndSave = async (req: Request, res: Response) => {
     try {

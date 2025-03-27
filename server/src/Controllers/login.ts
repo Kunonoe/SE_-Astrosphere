@@ -153,44 +153,6 @@ export const register = async (req: express.Request, res: express.Response) => {
         return res.status(500).json({ status: "error", message: "Internal Server Error" });
     }
 };
-export const resetPassword = async (req: express.Request, res: express.Response) => {
-    try {
-        const { userId, password, confirmPassword } = req.body;
-
-        //  ตรวจสอบว่าข้อมูลครบถ้วน
-        if (!userId || !password || !confirmPassword) {
-            return res.status(400).json({ status: "error", message: "User ID, New Password, and Confirm Password are required" });
-        }
-
-        //  ตรวจสอบว่ารหัสผ่านกับยืนยันรหัสผ่านตรงกัน
-        if (password !== confirmPassword) {
-            return res.status(400).json({ status: "error", message: "Passwords do not match" });
-        }
-
-        //  ตรวจสอบว่าผู้ใช้มีอยู่จริง
-        const user = await Account.findById(userId);
-        if (!user) {
-            return res.status(404).json({ status: "error", message: "User not found" });
-        }
-
-        //  เข้ารหัสรหัสผ่านใหม่ก่อนบันทึก
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(password, salt);
-
-        //  บันทึกรหัสผ่านใหม่ลง MongoDB
-        user.password = hashedPassword;
-        await user.save();
-
-        return res.status(200).json({
-            status: "success",
-            message: "Password reset successfully"
-        });
-
-    } catch (error) {
-        console.error("Error resetting password:", error);
-        return res.status(500).json({ status: "error", message: "Internal Server Error" });
-    }
-};
 export const showUsers = async (req: express.Request, res: express.Response) => {
     try {
         // ดึงเฉพาะ username จากฐานข้อมูล

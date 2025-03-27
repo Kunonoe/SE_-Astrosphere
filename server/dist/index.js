@@ -15,8 +15,8 @@ const sendmessages_1 = require("./SubServer/sendmessages");
 require("./SubServer/croncounttime");
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)({
-    origin: process.env.CLIENT_URL || "http://localhost:3000", // ✅ ใส่ URL ของ Frontend
-    credentials: true, // ✅ เปิดให้ส่ง Cookie ไปกับ Request
+    origin: true,
+    credentials: true,
 }));
 app.use((0, compression_1.default)());
 app.use((0, cookie_parser_1.default)());

@@ -2,8 +2,8 @@ import express from "express";
 import { Message } from "../models/message";
 
 // กำหนดเวลาส่งข้อความเป็น เที่ยงคืน 0 นาที (00:00 น.)
-const DEFAULT_SEND_HOUR = 0;  // เที่ยงคืน
-const DEFAULT_SEND_MINUTE = 57; // 0 นาที
+const DEFAULT_SEND_HOUR = 1;  // เที่ยงคืน
+const DEFAULT_SEND_MINUTE = 3; // 0 นาที
 
 export const receiveContent = async (req: express.Request, res: express.Response) => {
     try {

@@ -94,7 +94,8 @@ export default function ForgetPassword() {
                             />
                         </div>
 
-                        <div className='flex justify-center items-center gap-5'>
+                        {/* Password + Confirm Button */}
+                        <div className='flex justify-center items-end gap-5'>
                             {/* Password */}
                             <div className='flex flex-col gap-1'>
                                 <span className='text-white'>New Password : </span>
@@ -104,20 +105,21 @@ export default function ForgetPassword() {
                                     onChange={(e) => setPassword(e.target.value)}
                                 />
                             </div>
+
+                            {/* Confirm Button */}
+                            <button 
+                                className='self-end px-5 py-2 bg-emerald-600 text-white font-bold rounded-lg mb-1'
+                                onClick={handleResetPassword}
+                                disabled={loading}
+                            >
+                                {loading ? "Resetting..." : "Confirm"}
+                            </button>
                         </div>
                     </div>
 
                     {/* Messages */}
                     {message && <p className="text-green-500 mt-3">{message}</p>}
                     {error && <p className="text-red-500 mt-3">{error}</p>}
-
-                    <button 
-                        className='px-5 py-2 bg-emerald-600 text-white font-bold rounded-lg mt-5'
-                        onClick={handleResetPassword}
-                        disabled={loading}
-                    >
-                        {loading ? "Resetting..." : "Confirm"}
-                    </button>
                 </div>
             </main>
         </div>

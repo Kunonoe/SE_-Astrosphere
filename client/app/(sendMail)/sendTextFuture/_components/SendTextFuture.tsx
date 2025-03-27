@@ -70,7 +70,7 @@ export default function SendTextFuture() {
 
         try {
             await axios.post(
-                "http://localhost:5010/api/message",
+                "http://localhost:5000/api/message",
                 { userID, content: message, sendDate: date }, // ✅ ส่ง `sendTime` และ `sendDate` ไปด้วย
                 { withCredentials: true } // ✅ ส่ง Cookie ไปกับ Request
             );

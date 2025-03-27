@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { getCookie } from "cookies-next"; // ✅ ใช้ cookies-next
-import jwtDecode from "jwt-decode";
+import {jwtDecode} from "jwt-decode";
 
 interface DecodedToken {
     userId: string;

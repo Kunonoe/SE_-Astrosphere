@@ -4,8 +4,9 @@ import { Account } from "../models/login";
 
 export const sendScheduledMessages = async () => {
     try {
-        const now = new Date(); // เวลาปัจจุบัน
-        now.setSeconds(0, 0); // ปรับให้เหลือแค่ชั่วโมงและนาที
+        const now = new Date();         // เวลาปัจจุบัน
+        now.setSeconds(0, 0);           // ลบวินาทีและมิลลิวินาที
+        now.setHours(now.getHours() + 7);  // เพิ่ม 7 ชั่วโมง
 
         // ค้นหาข้อความที่ถึงเวลาส่ง (`sendDate` ต้องตรงกับ `now`)
         const messages = await Message.find({ sendDate: now, status: false });
@@ -20,7 +21,7 @@ export const sendScheduledMessages = async () => {
             console.log(`📩 ส่งข้อความให้ ${user.email} แล้ว`);
 
             // อัปเดตสถานะเป็นส่งแล้ว พร้อมบันทึกเวลา
-            await Message.findByIdAndUpdate(msg._id, { 
+            await Message.findByIdAndUpdate(msg._id, {
                 status: true,
                 sentAt: new Date() // บันทึกเวลาที่ส่งสำเร็จ
             });

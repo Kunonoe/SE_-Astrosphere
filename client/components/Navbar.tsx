@@ -2,24 +2,24 @@
 import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 import axios from "axios";
 import {deleteCookie , getCookie} from 'cookies-next/client';
 
 export default function Navbar() {
-  const router = useRouter();
+  // const router = useRouter();
   const token = getCookie('token');
   const Logout=()=>{
     const fetchCardData = async () => {
       try {
-        const response = await axios.post("http://localhost:5000/api/logout",{
+        const response = await axios.post(`${process.env.NEXT_PUBLIC_API_END_POINT}/api/logout`,{
 
         },{});
         const data = response.data;
         console.log(data)
         if(data.status == "success"){
           deleteCookie('token');
-          router.push("/login"); 
+          // router.push("/login"); 
           window.location.reload();
         }
       } catch (error) {

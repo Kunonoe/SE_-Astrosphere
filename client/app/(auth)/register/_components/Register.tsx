@@ -27,7 +27,7 @@ export default function RegisterPage() {
 
         try {
             console.log(1);
-            const response = await fetch("http://localhost:5000/api/register", {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_END_POINT}/api/register`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

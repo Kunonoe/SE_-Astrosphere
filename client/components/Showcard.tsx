@@ -18,7 +18,7 @@ export default function Showcard() {
 
     const fetchCardData = async () => {
       try {
-        const response = await axios.get(`http://localhost:5000/api/gettarot/${cardID}`);
+        const response = await axios.get(`${process.env.NEXT_PUBLIC_API_END_POINT}/api/gettarot/${cardID}`);
         const cardData = response.data;
         setCardImage(cardData.cardPHOTO);
         setCardName(cardData.cardNAME);

@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import { useRouter } from "next/navigation"; 
+// import { useRouter } from "next/navigation"; 
 import Image from "next/image";
 import Link from "next/link";
 import { setCookie } from 'cookies-next/client';
@@ -17,14 +17,14 @@ export default function LoginPage() {
   const [password, setPassword] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
-  const router = useRouter();
+  // const router = useRouter();
 
   const handleLogin = async () => {
     setLoading(true);
     setError(null); // Reset error before request
 
     try {
-      const response = await fetch("http://localhost:5000/api/login", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_END_POINT}/api/login`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -48,7 +48,8 @@ export default function LoginPage() {
         if (typeof window !== "undefined") {
           setCookie('token', data.token);
         }
-        router.replace("/menu"); 
+        // router.replace("/menu"); 
+        window.location.reload();
       } else {
         setError(data.message || "Login failed. Please try again.");
       }

@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import axios from "axios";
 import { getCookie } from "cookies-next"; // ✅ ใช้ cookies-next
-import { jwtDecode } from "jwt-decode";
+import jwtDecode from "jwt-decode";
 
 interface DecodedToken {
     userId: string;
@@ -69,8 +69,7 @@ export default function SendTextFuture() {
         setLoading(true);
 
         try {
-            await axios.post(
-                "http://localhost:5000/api/message",
+            await axios.post(`${process.env.NEXT_PUBLIC_API_END_POINT}/api/message`,
                 { userID, content: message, sendDate: date }, // ✅ ส่ง `sendTime` และ `sendDate` ไปด้วย
                 { withCredentials: true } // ✅ ส่ง Cookie ไปกับ Request
             );

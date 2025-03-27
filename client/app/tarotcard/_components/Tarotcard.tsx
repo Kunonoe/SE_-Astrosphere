@@ -18,7 +18,7 @@ export default function CardPicker() {
   useEffect(() => {
     const fetchCards = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/tarotall");
+        const response = await fetch(`${process.env.NEXT_PUBLIC_API_END_POINT}/api/tarotall`);
         const data = await response.json();
         
         setCards(data.cards.sort(() => Math.random() - 0.5));

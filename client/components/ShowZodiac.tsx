@@ -17,7 +17,7 @@ export default function Showcard() {
   useEffect(() => {
     const fetchCardData = async () => {
       try {
-        const response = await axios.post(`http://localhost:5000/api/zodiac`,{
+        const response = await axios.post(`${process.env.NEXT_PUBLIC_API_END_POINT}/api/zodiac`,{
             birthdate: birthdate,
             birthtime: birthtime
         },{});

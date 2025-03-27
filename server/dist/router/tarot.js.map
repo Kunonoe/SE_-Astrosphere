@@ -1,0 +1,1 @@
+{"version":3,"file":"tarot.js","sourceRoot":"","sources":["../../src/router/tarot.ts"],"names":[],"mappings":";;AACA,gDAAgE;AAEhE,kBAAe,CAAC,MAAc,EAAE,EAAE;IAC9B,MAAM,CAAC,GAAG,CAAC,WAAW,EAAE,iBAAS,CAAC,CAAC;IACnC,MAAM,CAAC,GAAG,CAAC,eAAe,EAAE,oBAAY,CAAC,CAAC;IAE1C,OAAO,MAAM,CAAC;AAClB,CAAC,CAAC"}

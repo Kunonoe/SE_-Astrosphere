@@ -3,8 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.receiveContent = void 0;
 const message_1 = require("../models/message");
 // กำหนดเวลาส่งข้อความเป็น เที่ยงคืน 0 นาที (00:00 น.)
-const DEFAULT_SEND_HOUR = 0; // เที่ยงคืน
-const DEFAULT_SEND_MINUTE = 57; // 0 นาที
+const DEFAULT_SEND_HOUR = 1; // เที่ยงคืน
+const DEFAULT_SEND_MINUTE = 33; // 0 นาที
 const receiveContent = async (req, res) => {
     try {
         const { userID, content, sendDate } = req.body;

@@ -12,7 +12,7 @@ export default function ForgetPassword() {
     const [message, setMessage] = useState<string | null>(null);
     const [error, setError] = useState<string | null>(null);
 
-    // ✅ ส่ง OTP ไปยังอีเมล
+    // ส่ง OTP ไปยังอีเมล
     const handleSendOtp = async () => {
         setLoading(true);
         setError(null);
@@ -32,7 +32,7 @@ export default function ForgetPassword() {
         }
     };
 
-    // ✅ ยืนยัน OTP และรีเซ็ตรหัสผ่าน
+    // ยืนยัน OTP และรีเซ็ตรหัสผ่าน
     const handleResetPassword = async () => {
         setLoading(true);
         setError(null);

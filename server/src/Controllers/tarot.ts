@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { Tarot } from "../models/tarocard";
 import connectDB from "../database/database"
 
+// ดึงไพ่ทาโรต์ทั้งหมด
 export const ListTarot = async (req: Request, res: Response): Promise<Response> => {
     try {
         await connectDB();
@@ -13,6 +14,7 @@ export const ListTarot = async (req: Request, res: Response): Promise<Response> 
     }
 };
 
+// ดึงไพ่จาก ID ที่ระบุ
 export const getTarotByID = async (req: Request, res: Response): Promise<Response> => {
     try {
         await connectDB();

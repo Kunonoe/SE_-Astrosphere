@@ -1,8 +1,8 @@
 import express from "express";
 import { Account } from "../models/login";
-import bcrypt from "bcrypt";
+import bcrypt from "bcrypt"; // ใช้สำหรับตรวจสอบรหัสผ่าน
 import { Request, Response } from "express"; 
-import jwt, { SignOptions } from "jsonwebtoken";
+import jwt, { SignOptions } from "jsonwebtoken"; // ใช้สร้าง Token เพื่อให้ผู้ใช้สามารถเข้าสู่ระบบได้
 import config from "../config/auth_config";
 
 interface LoginRequestBody {
@@ -65,7 +65,6 @@ export const login = async (req: Request<{}, {}, LoginRequestBody>, res: Respons
             config.JWT_SECRET, // ต้องเป็น string เท่านั้น
             { expiresIn } // ใช้ค่าที่กำหนดไว้อย่างถูกต้อง
         );
-        
 
         return res.status(200).json({
             status: "success",
@@ -153,6 +152,7 @@ export const register = async (req: express.Request, res: express.Response) => {
         return res.status(500).json({ status: "error", message: "Internal Server Error" });
     }
 };
+
 export const showUsers = async (req: express.Request, res: express.Response) => {
     try {
         // ดึงเฉพาะ username จากฐานข้อมูล

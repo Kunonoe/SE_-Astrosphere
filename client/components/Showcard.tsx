@@ -9,6 +9,8 @@ export default function Showcard() {
   const [cardImage, setCardImage] = useState("");
   const [cardName, setCardName] = useState("");
   const [prediction, setPrediction] = useState("");
+
+  // ดึงข้อมูลไพ่จากAPI 
   const searchParams = useSearchParams();
   const cardID = searchParams.get("id");
   const router = useRouter(); 

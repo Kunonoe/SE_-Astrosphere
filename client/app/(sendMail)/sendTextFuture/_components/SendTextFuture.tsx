@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 
 import Swal from "sweetalert2";
 import axios from "axios";
-import { getCookie } from "cookies-next"; // ✅ ใช้ cookies-next
+import { getCookie } from "cookies-next"; // ใช้ cookies-next
 import {jwtDecode} from "jwt-decode";
 
 interface DecodedToken {
@@ -17,19 +17,19 @@ export default function SendTextFuture() {
     const [loading, setLoading] = useState<boolean>(false);
     const [userID, setUserID] = useState<string | null>(null);
 
-    // ✅ ดึง userID จาก Token ใน Cookie
+    // ดึง userID จาก Token ใน Cookie
     useEffect(() => {
         try {
-            const token = getCookie("token"); // ✅ ใช้ cookies-next ดึง Token
+            const token = getCookie("token"); // ใช้ cookies-next ดึง Token
             if (token) {
                 const decoded: DecodedToken = jwtDecode(token as string);
-                setUserID(decoded.userId); // ✅ เซ็ตค่า userID
+                setUserID(decoded.userId); // เซ็ตค่า userID
             }
         } catch (error) {
             console.error("❌ Failed to decode token:", error);
         }
 
-        // ✅ ตั้งค่าวันที่เริ่มต้นเป็นพรุ่งนี้
+        // ตั้งค่าวันที่เริ่มต้นเป็นพรุ่งนี้
         const tomorrow = new Date();
         tomorrow.setDate(tomorrow.getDate() + 1);
         setDate(tomorrow.toISOString().split("T")[0]); // YYYY-MM-DD
@@ -70,8 +70,8 @@ export default function SendTextFuture() {
 
         try {
             await axios.post(`${process.env.NEXT_PUBLIC_API_END_POINT}/api/message`,
-                { userID, content: message, sendDate: date }, // ✅ ส่ง `sendTime` และ `sendDate` ไปด้วย
-                { withCredentials: true } // ✅ ส่ง Cookie ไปกับ Request
+                { userID, content: message, sendDate: date }, // ส่ง `sendTime` และ `sendDate` ไปด้วย
+                { withCredentials: true } // ส่ง Cookie ไปกับ Request
             );
 
             Swal.fire({
@@ -141,7 +141,7 @@ export default function SendTextFuture() {
                                 type="date"
                                 className="bg-transparent text-white focus:outline-none w-full"
                                 value={date}
-                                min={new Date().toISOString().split("T")[0]} // ✅ ห้ามเลือกวันที่ย้อนหลัง
+                                min={new Date().toISOString().split("T")[0]} // ห้ามเลือกวันที่ย้อนหลัง
                                 onChange={(e) => setDate(e.target.value)}
                             />
                         </div>

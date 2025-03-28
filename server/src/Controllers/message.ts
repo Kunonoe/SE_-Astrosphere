@@ -1,7 +1,7 @@
 import express from "express";
 import { Message } from "../models/message";
 
-// กำหนดเวลาส่งข้อความเป็น เที่ยงคืน 0 นาที (00:00 น.)
+// กำหนดเวลาส่งข้อความ
 const DEFAULT_SEND_HOUR = 1;  // เที่ยงคืน
 const DEFAULT_SEND_MINUTE = 33; // 0 นาที
 

@@ -9,6 +9,8 @@ export default function Showcard() {
   const [cardImage, setCardImage] = useState("");
   const [cardName, setCardName] = useState("");
   const [prediction, setPrediction] = useState("");
+
+  // ดึงข้อมูลจากAPI และแสดงผล
   const searchParams = useSearchParams(); 
   const birthdate = searchParams.get("birthdate");
   const birthtime = searchParams.get("birthtime"); 

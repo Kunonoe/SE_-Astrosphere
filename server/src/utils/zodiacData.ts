@@ -15,7 +15,7 @@ export const zodiacTable: Record<string, string[]> = {
     "16 ธ.ค. - 14 ม.ค.": ["ธนู", "มังกร", "กุมภ์", "มีน", "เมษ", "พฤษภ", "เมถุน", "กรกฎ", "สิงห์", "กันย์", "ตุลย์", "พิจิก"]
 };
 export const timeSlots = [5 ,7 ,9 ,11 ,13 ,15 ,17 ,19 ,21 ,23 ,1 ,3 ];
-// ✅ แปลงชื่อราศีจากไทย -> อังกฤษ
+// แปลงชื่อราศีจากไทย -> อังกฤษ
 export const zodiacMapping: Record<string, string> = {
     "มังกร": "Capricorn", "กุมภ์": "Aquarius", "มีน": "Pisces",
     "เมษ": "Aries", "พฤษภ": "Taurus", "เมถุน": "Gemini",

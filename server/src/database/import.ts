@@ -4,10 +4,10 @@ import csvParser from 'csv-parser';
 import { MongoClient } from 'mongodb';
 import dotenv from 'dotenv';
 
-// ✅ โหลดไฟล์ .env
+// โหลดไฟล์ .env
 dotenv.config();
 
-console.log("🔹 MONGO_URL:", process.env.MONGO_URL); // ✅ เช็คว่า MONGO_URL ถูกโหลดไหม
+console.log("🔹 MONGO_URL:", process.env.MONGO_URL); // เช็คว่า MONGO_URL ถูกโหลดไหม
 
 const uri: string | undefined = process.env.MONGO_URL;
 
@@ -42,7 +42,7 @@ async function importCSV(fileName: string, collectionName: string) {
         const db = client.db(dbName);
         const collection = db.collection(collectionName);
 
-        // 🛑 ล้างข้อมูลเก่าออกก่อน
+        // ล้างข้อมูลเก่าออกก่อน
         await collection.deleteMany({});
         console.log(`🗑️ Cleared old data in ${collectionName}`);
 
@@ -51,36 +51,36 @@ async function importCSV(fileName: string, collectionName: string) {
 
         // อ่าน CSV และแปลงเป็น JSON (บังคับใช้ Header ที่ถูกต้อง)
         fs.createReadStream(filePath, { encoding: 'utf-8' })
-            .pipe(csvParser({ headers: ['cardID', 'cardNAME', 'cardMEANING', 'cardPHOTO'], skipLines: 1 })) // ✅ บังคับใช้ Header
+            .pipe(csvParser({ headers: ['cardID', 'cardNAME', 'cardMEANING', 'cardPHOTO'], skipLines: 1 })) // บังคับใช้ Header
             .on('data', (row: Record<string, string>) => {
-                // ✅ ตัดช่องว่าง
+                // ตัดช่องว่าง
                 Object.keys(row).forEach((key) => {
                     if (row[key]) row[key] = row[key].trim();
                 });
 
-                // ✅ ตรวจสอบว่า field ไม่ว่าง
+                // ตรวจสอบว่า field ไม่ว่าง
                 if (!row.cardID || !row.cardNAME || !row.cardMEANING || !row.cardPHOTO) {
                     console.log(`⚠️ Skipping row (Missing required fields):`, row);
                     return;
                 }
 
-                // ✅ แปลง `cardID` เป็นตัวเลข
+                // แปลง `cardID` เป็นตัวเลข
                 const parsedCardID = parseInt(row.cardID, 10);
                 if (isNaN(parsedCardID)) {
                     console.log(`❌ Invalid cardID (NaN):`, row.cardID);
                     return;
                 }
 
-                // ✅ เก็บ `\n` ไว้ใน `cardMEANING` และแก้ไข `""` ซ้อนกัน
+                // เก็บ `\n` ไว้ใน `cardMEANING` และแก้ไข `""` ซ้อนกัน
                 const cleanedMeaning = row.cardMEANING
                     .replace(/\\n/g, '\n') // ทำให้ขึ้นบรรทัดใหม่ได้
                     .replace(/""/g, '"');  // แก้ปัญหาการใช้ "" ซ้อนกันใน CSV
 
-                // ✅ เพิ่มข้อมูลลงใน MongoDB
+                // เพิ่มข้อมูลลงใน MongoDB
                 cards.push({
                     cardID: parsedCardID,
                     cardNAME: row.cardNAME,
-                    cardMEANING: cleanedMeaning, // ✅ เก็บขึ้นบรรทัดใหม่
+                    cardMEANING: cleanedMeaning, // เก็บขึ้นบรรทัดใหม่
                     cardPHOTO: row.cardPHOTO
                 });
             })

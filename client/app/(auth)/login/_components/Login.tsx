@@ -44,7 +44,7 @@ export default function LoginPage() {
       console.log("✅ Login Response:", data);
 
       if (data.status === "success" && data.token) {
-        // ✅ บันทึก Token ลงใน Cookies
+        // บันทึก Token ลงใน Cookies
         if (typeof window !== "undefined") {
           setCookie('token', data.token);
         }

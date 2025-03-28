@@ -5,7 +5,7 @@ import { sendOTP } from "../utils/sendOTP"; // ฟังก์ชันส่ง
 
 const otpStore = new Map<string, string>(); // เก็บ OTP ชั่วคราว
 
-// 📌 ฟังก์ชันส่ง OTP ไปยังอีเมล
+// ฟังก์ชันส่ง OTP ไปยังอีเมล
 export const requestOTP = async (req: express.Request, res: express.Response) => {
     try {
         const {email} = req.body;
@@ -32,7 +32,7 @@ export const requestOTP = async (req: express.Request, res: express.Response) =>
     }
 };
 
-// 📌 ฟังก์ชันอัปเดตรหัสผ่านหลังจากตรวจสอบ OTP
+// ฟังก์ชันอัปเดตรหัสผ่านหลังจากตรวจสอบ OTP
 export const updatePassword = async (req: express.Request, res: express.Response) => {
     try {
         const { email, newpassword, otp } = req.body;

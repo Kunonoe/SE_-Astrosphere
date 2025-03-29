@@ -5,7 +5,7 @@ import Logo from "@/assets/logo.png";
 
 export default function RegisterPage() {
     const [username, setUsername] = useState<string>("");
-    const [lastname, setLastname] = useState<string>("");
+    const [firstname, setFirstname] = useState<string>("");
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [confirmpassword, setConfirmPassword] = useState<string>("");
@@ -34,7 +34,7 @@ export default function RegisterPage() {
                 },
                 body: JSON.stringify({
                     username,    // Changed from name → username
-                    lastname,
+                    firstname,
                     email,
                     password,
                     confirmpassword   // Changed from birthdate → birthday
@@ -71,8 +71,8 @@ export default function RegisterPage() {
                                 <input type="text" placeholder='Enter your name' className="text-[13px] w-[275px] rounded-md p-2 bg-white/20 backdrop-blur-md text-white placeholder-gray-300" value={username} onChange={(e) => setUsername(e.target.value)} />
                             </div>
                             <div className='flex flex-col gap-1'>
-                                <span className='text-white text-[15px]'>Lastname:</span>
-                                <input type="text" placeholder='Enter your lastname' className="text-[13px] w-[275px] rounded-md p-2 bg-white/20 backdrop-blur-md text-white placeholder-gray-300" value={lastname} onChange={(e) => setLastname(e.target.value)} />
+                                <span className='text-white text-[15px]'>Firstname:</span>
+                                <input type="text" placeholder='Enter your lastname' className="text-[13px] w-[275px] rounded-md p-2 bg-white/20 backdrop-blur-md text-white placeholder-gray-300" value={firstname} onChange={(e) => setFirstname(e.target.value)} />
                             </div>
                         </div>
                         <div className='flex justify-center items-center gap-5'>

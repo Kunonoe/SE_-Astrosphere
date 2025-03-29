@@ -67,7 +67,7 @@ export default function RegisterPage() {
                     <div className='flex flex-col gap-5 mt-8'>
                         <div className='flex justify-center items-center gap-5'>
                             <div className='flex flex-col gap-1'>
-                                <span className='text-white text-[15px]'>Name:</span>
+                                <span className='text-white text-[15px]'>UserName:</span>
                                 <input type="text" placeholder='Enter your name' className="text-[13px] w-[275px] rounded-md p-2 bg-white/20 backdrop-blur-md text-white placeholder-gray-300" value={username} onChange={(e) => setUsername(e.target.value)} />
                             </div>
                             <div className='flex flex-col gap-1'>
